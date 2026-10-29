@@ -1,0 +1,35 @@
+name = "LeanPermutation"
+version = "0.1.0"
+license = "Apache-2.0"
+defaultTargets = ["LeanPermutation"]
+lintDriver = "batteries/runLinter"
+
+[leanOptions]
+autoImplicit = false
+# The Mathlib linter set, without its formatting-only checks.
+weak.linter.mathlibStandardSet = true
+weak.linter.style.header = false
+weak.linter.style.longLine = false
+weak.linter.style.emptyLine = false
+weak.linter.style.openClassical = false
+
+# Frozen versions: this file and lean-toolchain are the single record.
+# Mathlib must be the commit that Statlib pins; scripts/check_versions.sh checks this in CI.
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "ba2e6f0c70736517f719a458098b9bbcfa5c92d3"
+
+[[require]]
+name = "Statlib"
+git = "https://github.com/stat-lib/statlib"
+rev = "22072083ba61442c740413ce35cef387bd249b68"
+
+# Checks that the declarations named in the blueprint exist (`lake exe checkdecls`).
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+rev = "3d425859e73fcfbef85b9638c2a91708ef4a22d4"
+
+[[lean_lib]]
+name = "LeanPermutation"

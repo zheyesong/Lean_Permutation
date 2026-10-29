@@ -1,0 +1,52 @@
+name: Lean
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["blueprint/**", "**.md"]
+  pull_request:
+    branches: [main]
+    paths-ignore: ["blueprint/**", "**.md"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded runs on pull requests only; every run on main completes.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and lint
+    # The runner image is pinned like the other versions.
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Free disk space for the Mathlib cache
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # mk_all-check is off: it needs at least one module under LeanPermutation/.
+      - name: Build and lint
+        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6 # v1.6.2
+        with:
+          build: true
+          lint: true
+          mk_all-check: false
+          axiom-audit: false
+
+      - name: Check pinned versions
+        run: bash scripts/check_versions.sh

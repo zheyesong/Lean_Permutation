@@ -1,0 +1,14 @@
+# Lake build output and dependencies
+/.lake/
+
+# Blueprint build output (leanblueprint / plasTeX)
+/blueprint/print/
+/blueprint/web/
+/blueprint/lean_decls
+/blueprint/src/web.paux
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+__pycache__/
