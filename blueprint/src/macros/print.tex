@@ -1,0 +1,30 @@
+% Macros used only by the print version.
+
+% The leanblueprint macros do nothing in the print version.
+\newcommand{\lean}[1]{}
+\newcommand{\discussion}[1]{}
+\newcommand{\leanok}{}
+\newcommand{\mathlibok}{}
+\newcommand{\notready}{}
+% Mathlib names in the text; the print version may break a line after an underscore.
+\newcommand{\mathlibname}[1]{{\ttfamily\def\_{\textunderscore\allowbreak}#1}}
+
+% \uses and \proves refer to their labels invisibly, so that LaTeX warns about
+% a label that does not exist.
+\ExplSyntaxOn
+\NewDocumentCommand{\uses}{m}
+ {\clist_map_inline:nn{#1}{\vphantom{\ref{##1}}}%
+  \ignorespaces}
+\NewDocumentCommand{\proves}{m}
+ {\clist_map_inline:nn{#1}{\vphantom{\ref{##1}}}%
+  \ignorespaces}
+\ExplSyntaxOff
+
+% Theorem-like environments share one counter, numbered within chapters;
+% thmtools lets \cref name each environment correctly.
+\declaretheorem[numberwithin=chapter]{theorem}
+\declaretheorem[sibling=theorem]{proposition}
+\declaretheorem[sibling=theorem]{lemma}
+\declaretheorem[sibling=theorem]{corollary}
+\declaretheorem[sibling=theorem, style=definition]{definition}
+\declaretheorem[style=remark, numbered=no]{remark}

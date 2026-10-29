@@ -1,0 +1,545 @@
+\chapter{Permutation processes}
+\label{chap:permutation-processes}
+
+\section{Setting}
+
+\begin{definition}[Finite population and permutation measure; \han{Chapter 5, setting}{101}]
+  \label{def:population}
+  \uses{def:uniform-permutation}
+  \fid{adapted}
+  For each $N$ let $z_1,\dots,z_N$ be points of a set $\cZ$ (non-random, not necessarily distinct), $\PN=N^{-1}\sum_i\delta_{z_i}$, $\pi$ a uniform random permutation of $[N]$ and $1\le n\le N$. The permutation measure is $\Ppin=n^{-1}\sum_{i:\pi(i)\le n}\delta_{z_i}$, the law of a sample of size $n$ drawn without replacement. For $f:\cZ\to\R$ put $\Gpin f=\sqrt n(\Ppin f-\PN f)$, for a class $\cF$ put $\|\Ppin-\PN\|_{\cF}=\sup_{f\in\cF}|(\Ppin-\PN)f|$, and write $\|h\|_\infty=\max_i|h(z_i)|$. Limits are taken along $N\to\infty$ with $n=n_N\to\infty$.
+\end{definition}
+
+\begin{lemma}[Combinatorial form; \han{Lemma 5.2}{105}]
+  \label{lem:han-5-2}
+  \uses{def:population, def:array}
+  \fid{adapted}
+  $\Ppin f=\sum_ia^f_{i\pi(i)}$ with $a^f_{ij}=f(z_i)\ind(j\le n)/n$, and $(\Ppin-\PN)f=\sum_id^f_{i\pi(i)}$ with the doubly centred array $d^f_{ij}=(f(z_i)-\PN f)(\ind(j\le n)-n/N)/n$.
+\end{lemma}
+\begin{proof}
+  Exercise 5.1 of the book.
+\end{proof}
+
+\begin{lemma}[Moments; \han{Lemma 5.3}{105}]
+  \label{lem:han-5-3}
+  \uses{def:population}
+  \fid{as printed}
+  $\E\Gpin f=0$, $\Var\Gpin f=\frac{N-n}{N-1}\PN(f-\PN f)^2$ and $\Cov(\Gpin f,\Gpin g)=\frac{N-n}{N-1}\bigl(\PN(fg)-\PN f\,\PN g\bigr)$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-5-2, prop:han-3-1}
+  \Cref{lem:han-5-2} and \cref{prop:han-3-1} (or \cref{prop:han-1-1-sampling}).
+\end{proof}
+
+\section{Ros\'en processes}
+
+\begin{definition}[Ros\'en process; \han{\S5.1}{102}]
+  \label{def:rosen}
+  \uses{def:population}
+  \fid{as printed}
+  For a population $z_1,\dots,z_N\in\R$, $Z_N(t)=\sum_iz_i\ind(\pi(i)\le\lceil Nt\rceil)$ for $t\in[0,1]$.
+\end{definition}
+
+\begin{lemma}[Pruss's inequality; \han{Lemma 5.1}{104}]
+  \label{lem:han-5-1}
+  \notready
+  \fid{as printed}
+  Fix $\gamma>1$. There is $c=c(\gamma)$ such that, if $X_1,\dots,X_{\lceil n\gamma\rceil}$ are exchangeable, then for $k\in[n]$ and $t>0$,
+  $\Pr\bigl(\max_{\ell\le k}|\sum_{i\le\ell}X_i|>t\bigr)\le c\,\Pr\bigl(|\sum_{i\le k}X_i|>t/c\bigr)$.
+\end{lemma}
+\begin{remark}
+  Cited in the book. It is Theorem 1 of A.~R. Pruss, \emph{A maximal inequality for partial sums of finite exchangeable sequences of random variables}, Proc.\ Amer.\ Math.\ Soc.\ 126 (1998), no.~6, 1811--1819 (on pages 1812--1813), in the real-valued case with $\lceil n\gamma\rceil$ variables. One may take $c(\gamma)=24\bar\gamma^2/(\bar\gamma-1)^2$ with $\bar\gamma=\min(\gamma,2)$ (Remark~1, on page 1815), so $c=96$ for $\gamma\ge2$.
+
+  Not ready: the general exchangeable case is deferred to a later stage. The proof of \cref{thm:han-5-1} uses only the case of sampling without replacement, which is \cref{lem:pruss-sampling}.
+\end{remark}
+
+\begin{lemma}[Pruss's inequality for sampling without replacement; \han{Lemma 5.1}{104}]
+  \label{lem:pruss-sampling}
+  \uses{def:uniform-permutation}
+  \fid{adapted}
+  Let $a_1,\dots,a_N\in\R$, let $\pi$ be a uniform random permutation of $[N]$ and $S_\ell=\sum_{i\le\ell}a_{\pi(i)}$. If $1\le k$ and $2k\le N$, then for $t>0$,
+  $\Pr\bigl(\max_{\ell\le k}|S_\ell|>t\bigr)\le 96\,\Pr\bigl(|S_k|>t/96\bigr)$.
+\end{lemma}
+\begin{proof}
+  The sequence $a_{\pi(1)},\dots,a_{\pi(N)}$ is exchangeable, because $\pi\circ\sigma$ is again uniform for every $\sigma\in\SN$. Apply Theorem 1 of Pruss (1998) with $n'=N$, $n=k$ and $\gamma=2$, with the constants of its Remark~1. In the proof, a concentration point is taken with probability strictly greater than $2/3$ (Proposition~1), and the event $E$ in the proof of Lemma~2 is defined by a strict inequality; the constants do not change. With $\gamma=2$ that proof has $r=n$, so $\lceil n/r\rceil=1$ and the bound for $j=n$ is needed as well: there $T'_n$ and $0$ are both conditional $4\lambda$-concentration points of $S_n$, so $\|T'_n\|\le8\lambda$. Every conditional probability in the proof is with respect to a random vector with finitely many values.
+\end{proof}
+\begin{remark}
+  This is the case of \cref{lem:han-5-1} that the proof of \cref{thm:han-5-1} uses: sampling without replacement from $a_1,\dots,a_N$, real values, $\gamma=2$ and, in the notation of \cref{lem:han-5-1}, $k=n$ and $\lceil n\gamma\rceil$ replaced by $N\ge2n$. The book does not give the constant. Remark~1 of Pruss (1998), on page 1815, gives two constants for $\gamma\ge2$, $66$ in front and $96$ inside the probability; since the right-hand side does not decrease when either constant grows, the single constant $96$ can be used for both.
+\end{remark}
+
+\begin{theorem}[Ros\'en--Billingsley; \han{Theorem 5.1}{102}]
+  \label{thm:han-5-1}
+  \uses{def:rosen, def:linf-weak-conv}
+  \fid{adapted}
+  If $\sum_iz_i=0$, $\sum_iz_i^2=1$ and $\max_i|z_i|\to0$, then $Z_N$ converges weakly in $\linf([0,1])$, in the sense of \cref{def:linf-weak-conv} with $\rho(s,t)=|s-t|$, to a Borel probability measure $\mathbb B$ with $\mathbb B(\UC([0,1]))=1$ whose finite-dimensional laws are centred Gaussian with covariance $s\wedge t-st$ (the Brownian bridge).
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-2-5-suff, lem:pruss-sampling, thm:han-3-7, thm:han-3-2, cor:han-2-1, lem:dw-weak}
+  Finite-dimensional convergence: for $\lambda\in\R^k$, $\sum_k\lambda_kZ_N(t_k)$ is a combinatorial sum with $d_{ij}=z_i\tilde c_j$, $|\tilde c_j|\le2\sum_k|\lambda_k|$, so both terms of \cref{thm:han-3-2} vanish as $\max_i|z_i|\to0$. In the non-degenerate case $\sigma_A^2\to\lambda^\top\Sigma\lambda>0$, so $\sigma_A>0$ for large $N$, and $d_W$ of the unnormalized sum to its Gaussian limit also tends to $0$ (\cref{lem:dw-weak}); then \cref{cor:han-2-1}. Equicontinuity: \cref{lem:pruss-sampling} and \cref{thm:han-3-7} on blocks of length $\delta$. Since $Z_N(\ell/N)=\sum_{j\le\ell}z_{\pi^{-1}(j)}$ and $\pi^{-1}$ is again uniform, \cref{lem:pruss-sampling} applies with $a_i=z_i$, the permutation $\pi^{-1}$ and, in its notation, $k=\lceil N\delta\rceil$; its hypothesis $2\lceil N\delta\rceil\le N$ holds for $0<\delta\le1/4$ and $N\ge4$, because $2\lceil N\delta\rceil<2N\delta+2\le N/2+2\le N$. This is enough, since $N\to\infty$ before $\delta\downarrow0$. For the block $m\delta\le t\le(m+1)\delta$, put $q=\lceil Nm\delta\rceil$: the increments $Z_N(t)-Z_N(m\delta)$ are the partial sums $S'_\ell$ for the permutation $\pi^{-1}\circ\rho$, where $\rho$ is the fixed cyclic shift $\rho(i)\equiv q+i\pmod N$, and $\pi^{-1}\circ\rho$ is again uniform. The block has $\lceil N(m+1)\delta\rceil-\lceil Nm\delta\rceil\le\lceil N\delta\rceil$ indices, because $\lceil a+b\rceil\le\lceil a\rceil+\lceil b\rceil$, so its supremum is at most $\max_{\ell\le\lceil N\delta\rceil}|S'_\ell|$, and \cref{lem:pruss-sampling} applies to it with the same $k$. This covers the last, shorter block too; there are $\lceil1/\delta\rceil$ blocks. The second term, $|Z_N(m\delta)-Z_N(s)|$ for $(m-1)\delta\le s\le m\delta$, is at most twice the supremum over the block that starts at $(m-1)\delta$. Conclude with \cref{thm:han-2-5-suff}.
+\end{proof}
+\begin{remark}
+  The book calls the finite-dimensional convergence straightforward. The argument above uses \cref{thm:han-3-2} instead of the cited Theorem 3.1, and does not need \cref{prop:han-3-4}. It uses Pruss's inequality only for sampling without replacement (\cref{lem:pruss-sampling}), not in the general form of \cref{lem:han-5-1}. The book compares every block with the first one by an equality; here this is an inequality, because the blocks need not contain the same number of indices. The book's conclusion ``$\Rightarrow B(0,1)$'' is stated here with the limit described by its properties.
+\end{remark}
+
+\section{Maximal inequalities}
+
+\begin{theorem}[Sub-Gaussian bounds; \han{Theorem 5.2}{105}]
+  \label{thm:han-5-2}
+  \uses{def:population, def:han-2-11}
+  \fid{as printed}
+  $\|(\Ppin-\PN)f\|_{\psi_2}\le\sqrt{\frac{12}n\bigl(1+\frac Nn\bigr)}\,\|f-\PN f\|_{L^2(\PN)}$ and
+  $\|(\Ppin-\PN)(f-g)\|_{\psi_2}\le\sqrt{\frac{48}n\bigl(1+\frac Nn\bigr)}\,\|f-g\|_{L^2(\PN)}$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-5-2, thm:han-3-6, lem:han-2-2-i}
+  \Cref{lem:han-5-2}, \cref{thm:han-3-6} for the product array, and \cref{lem:han-2-2-i}.
+\end{proof}
+
+\begin{theorem}[Bernstein--Serfling bounds; \han{Theorem 5.3}{107}]
+  \label{thm:han-5-3}
+  \uses{def:population, def:han-2-11}
+  \fid{adapted}
+  $\|(\Ppin-\PN)f\|_{\psi_1}\le\frac{24\sqrt2}n\|f-\PN f\|_\infty+\sqrt{\frac{72}{n\log2}}\,\|f-\PN f\|_{L^2(\PN)}$, and the same for $f-g$ with constants $48\sqrt2$ and $\sqrt{288/(n\log2)}$ and the norms of $f-g$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-5-2, thm:han-3-7, lem:han-2-4}
+  Exercise 5.2 of the book: \cref{thm:han-3-7}, then \cref{lem:han-2-4}.
+\end{proof}
+
+\begin{corollary}[Convex ordering for processes; \han{Corollary 5.1}{107}]
+  \label{cor:han-5-1}
+  \uses{def:uniform-permutation}
+  \fid{as printed}
+  For fixed $w_1,\dots,w_L$ in a set $\mathcal W$ with empirical measure $\mathrm W_L$, any class $\cF$ of functions on $\mathcal W$ and $\ell\in[L]$,
+  $\E\bigl\|\sum_{i\le\ell}(\delta_{w_{\pi^{-1}(i)}}-\mathrm W_L)\bigr\|_{\cF}\le\E\bigl\|\sum_{i\le\ell}(\delta_{\widehat W_i}-\mathrm W_L)\bigr\|_{\cF}$,
+  where $\widehat W_1,\dots,\widehat W_\ell$ are i.i.d.\ with law $\mathrm W_L$ and $\|\mu\|_{\cF}=\sup_{f\in\cF}|\mu f|$.
+\end{corollary}
+\begin{proof}
+  \uses{thm:han-3-8}
+  \Cref{thm:han-3-8} in $\R^{\cF}$ with the convex function $x\mapsto\sup_f|x_f|$, first for finite subclasses, then by monotone convergence.
+\end{proof}
+
+\section{Permutation law of large numbers and CLT}
+
+\begin{theorem}[Permutation law of large numbers, condition (C1); \han{Theorem 5.4}{107}]
+  \label{thm:han-5-4-c1}
+  \uses{def:population}
+  \fid{adapted}
+  If $\limsup_N\PN(f-\PN f)^2<\infty$ and $\liminf_Nn/N>0$, then $(\Ppin-\PN)f\to0$ completely: $\sum_N\Pr\bigl(|(\Ppin-\PN)f|>\epsilon\bigr)<\infty$ for every $\epsilon>0$.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-5-2}
+  Under these conditions \cref{thm:han-5-2} bounds the $\psi_2$-norm of $(\Ppin-\PN)f$ by $C/\sqrt n$ for large $N$, so the tail probability at $\epsilon$ is at most $2\exp(-\epsilon^2n/C^2)$; since $n\ge c'N$ eventually, the series over $N$ converges.
+\end{proof}
+\begin{remark}
+  The book states almost sure convergence without saying how the permutations $\pi_N$ for different $N$ are realized together; complete convergence gives almost sure convergence for every such realization (\cref{chap:conventions}). The book's proof sums over $n$; the sum is over $N$.
+\end{remark}
+
+\begin{theorem}[Permutation law of large numbers, condition (C2); \han{Theorem 5.4}{107}]
+  \label{thm:han-5-4-c2}
+  \uses{def:population}
+  \fid{adapted}
+  If $\limsup_N\PN(f-\PN f)^4<\infty$ and $\sum_Nn_N^{-2}<\infty$, then $(\Ppin-\PN)f\to0$ completely.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-3-8}
+  Comparing with sampling with replacement (\cref{thm:han-3-8} with the convex function $x\mapsto x^4$) and expanding the fourth moment of an i.i.d.\ mean gives $\E|(\Ppin-\PN)f|^4\le3\PN(f-\PN f)^4/n^2$. By Markov's inequality the tail probabilities at $\epsilon$ are at most $3\epsilon^{-4}\PN(f-\PN f)^4n^{-2}$, which are summable over $N$.
+\end{proof}
+\begin{remark}
+  The summability of $n_N^{-2}$ is added to the book's bound on the fourth moments; with it the tail bounds of the proof are summable over $N$.
+\end{remark}
+
+\begin{theorem}[Permutation CLT; \han{Theorem 5.5}{108}]
+  \label{thm:han-5-5}
+  \uses{def:population, def:han-2-2}
+  \fid{adapted}
+  Suppose $n\to\infty$ and $n/N\to\gamma\in[0,1)$, let $\mathrm P$ be a probability measure on $\cZ$, and let $f_1,\dots,f_m$ be square-integrable for $\mathrm P$ and satisfy $\limsup_N\PN|f_i-\PN f_i|^3<\infty$, $\PN f_i\to\mathrm Pf_i$ and $\PN(f_if_j)\to\mathrm P(f_if_j)$ for all $i,j$. Then $\Gpin\boldsymbol f\Rightarrow N(0,\Sigma)$, where $\boldsymbol f=(f_1,\dots,f_m)$ and $\Sigma_{ij}=(1-\gamma)\,\mathrm P(f_i-\mathrm Pf_i)(f_j-\mathrm Pf_j)$.
+\end{theorem}
+\begin{proof}
+  \uses{cor:han-2-1, lem:trunc-clt, lem:han-5-2, lem:han-5-3, lem:slutsky-laws}
+  By \cref{cor:han-2-1} it suffices to treat $S=v^\top\Gpin\boldsymbol f=\sqrt n(\Ppin-\PN)h$ with $h=v^\top(\boldsymbol f-\PN\boldsymbol f)$. It is a combinatorial sum (\cref{lem:han-5-2}) with variance $\frac{N-n}{N-1}\PN h^2\to v^\top\Sigma v$ (\cref{lem:han-5-3}). If $v^\top\Sigma v=0$ the variance tends to $0$. Otherwise its $L_N$ is $O(n^{-1/2})$, because the third moments of $h$ are bounded and $\sum_j|\ind(j\le n)-n/N|^3\le2n$; so $S/\mathrm{sd}(S)\Rightarrow N(0,1)$ by \cref{lem:trunc-clt}, and \cref{lem:slutsky-laws} rescales.
+\end{proof}
+\begin{remark}
+  The book's proof uses its Theorem 3.1 (cited); \cref{lem:trunc-clt} replaces it. The book also assumes $\PN\Rightarrow\mathrm P$, which its proof does not use; it is left out, so $\cZ$ needs no topology.
+\end{remark}
+
+\section{Concentration: Bobkov and Tolstikhin}
+
+\begin{definition}[Symmetric functions and gradients; \han{Definitions 5.1--5.2}{110}]
+  \label{def:han-5-1}
+  \uses{def:uniform-permutation}
+  \fid{adapted}
+  Let $\mathcal G_N$ be the set of orderings $\sigma=(\sigma_1,\dots,\sigma_N)$ of $[N]$, and for $i\ne j$ let $\sigma^{i,j}$ be $\sigma$ with entries $i$ and $j$ swapped. Let $\mathcal I=[n]$ and $\mathcal J=[N]\setminus[n]$. A function $g:\mathcal G_N\to\R$ is $(n,N)$-symmetric if it is invariant under permutations of the first $n$ entries and of the last $N-n$ entries. Put
+  $|\nabla g(\sigma)|^2=\sum_{i\in\mathcal I}\sum_{j\in\mathcal J}(g(\sigma)-g(\sigma^{i,j}))^2$ and
+  $|\nabla g(\sigma)|_+^2=\sum_{i\in\mathcal I}\sum_{j\in\mathcal J}(g(\sigma)-g(\sigma^{i,j}))^2\ind\bigl(g(\sigma)\ge g(\sigma^{i,j})\bigr)$.
+  The random ordering is $\boldsymbol\pi=(\pi^{-1}(1),\dots,\pi^{-1}(N))$, uniform on $\mathcal G_N$.
+\end{definition}
+
+\begin{lemma}[Bobkov's lemma; \han{Lemma 5.4}{111}]
+  \label{lem:han-5-4}
+  \uses{def:han-5-1}
+  \fid{as printed}
+  For $(n,N)$-symmetric $g$,
+  $(N+2)\Ent(e^{g(\boldsymbol\pi)})\le\E\sum_{i\in\mathcal I,j\in\mathcal J}\bigl(g(\boldsymbol\pi)-g(\boldsymbol\pi^{i,j})\bigr)\bigl(e^{g(\boldsymbol\pi)}-e^{g(\boldsymbol\pi^{i,j})}\bigr)$.
+\end{lemma}
+\begin{remark}
+  No proof in the book; the Notes attribute it to Bobkov (2004), Theorem 2.1. Not checked against the source.
+\end{remark}
+
+\begin{corollary}[Bobkov's inequality; \han{Corollary 5.2}{111}]
+  \label{cor:han-5-2}
+  \uses{def:han-5-1}
+  \fid{as printed}
+  Let $0<\Sigma^2<\infty$. If $g$ is $(n,N)$-symmetric and $|\nabla g|^2\le\Sigma^2$ everywhere, then for every $t\ge0$, $\Pr(|g(\boldsymbol\pi)-\E g(\boldsymbol\pi)|\ge t)\le2\exp\bigl(-(N+2)t^2/(4\Sigma^2)\bigr)$.
+\end{corollary}
+\begin{proof}
+  \uses{lem:han-5-4}
+  Herbst's argument from \cref{lem:han-5-4}; the book gives none.
+\end{proof}
+
+\begin{corollary}[\han{Corollary 5.3}{111}]
+  \label{cor:han-5-3}
+  \uses{def:han-5-1, def:population}
+  \fid{as printed}
+  For $g=(\Ppin-\PN)f$, $|\nabla g|^2\le(N/n)^2\|f-\PN f\|_{L^2(\PN)}^2$; hence $\|(\Ppin-\PN)f\|_{\psi_2}\le\sqrt{12N/n^2}\,\|f-\PN f\|_{L^2(\PN)}$.
+\end{corollary}
+\begin{proof}
+  \uses{cor:han-5-2, lem:han-2-2-i}
+  Compute the gradient, then \cref{cor:han-5-2} and \cref{lem:han-2-2-i}.
+\end{proof}
+
+\begin{corollary}[Tolstikhin's version, upper tail; \han{Corollary 5.4}{112}]
+  \label{cor:han-5-4-upper}
+  \uses{def:han-5-1}
+  \fid{adapted}
+  Let $0<\Sigma^2<\infty$. If $g$ is $(n,N)$-symmetric and $|\nabla g|_+^2\le\Sigma^2$ everywhere, then for every $t\ge0$, $\Pr(g(\boldsymbol\pi)-\E g(\boldsymbol\pi)\ge t)\le\exp\bigl(-(N+2)t^2/(8\Sigma^2)\bigr)$.
+\end{corollary}
+\begin{proof}
+  \uses{lem:han-5-4}
+  \Cref{lem:han-5-4}, $(a-b)(e^a-e^b)\le\frac{e^a+e^b}2(a-b)^2$, and Herbst's argument for $\lambda\ge0$.
+\end{proof}
+
+\begin{corollary}[Tolstikhin's version, two-sided; \han{Corollary 5.4}{112}]
+  \label{cor:han-5-4-two-sided}
+  \uses{def:han-5-1}
+  \notready
+  \fid{as printed}
+  As printed: under the hypothesis of \cref{cor:han-5-4-upper}, $\Pr(|g(\boldsymbol\pi)-\E g(\boldsymbol\pi)|\ge t)\le2\exp\bigl(-(N+2)t^2/(8\Sigma^2)\bigr)$.
+\end{corollary}
+\begin{remark}
+  Not ready: the printed statement needs an additional hypothesis before it can be formalized. The hypothesis controls only $|\nabla g|_+$, which gives the upper tail; a bound for the lower tail needs a condition on $-g$ as well, for example $|\nabla(-g)|_+^2\le\Sigma^2$, with which \cref{cor:han-5-4-upper} applies to $-g$. Only the upper tail (\cref{cor:han-5-4-upper}) is used later.
+\end{remark}
+
+\begin{theorem}[Tolstikhin--Talagrand inequality; \han{Theorem 5.6}{113}]
+  \label{thm:han-5-6}
+  \uses{def:population}
+  \fid{adapted}
+  Let $\Sigma_{\cF}^2=\sup_{f\in\cF}\|f-\PN f\|_{L^2(\PN)}^2$, and suppose that $\Sigma_{\cF}<\infty$. If $\Sigma_{\cF}>0$, then for every $t\ge0$,
+  $\Pr\bigl(\|\Ppin-\PN\|_{\cF}-\E\|\Ppin-\PN\|_{\cF}\ge t\bigr)\le\exp\bigl(-n^2t^2/(8N\Sigma_{\cF}^2)\bigr)$. If $\Sigma_{\cF}=0$, every $f\in\cF$ is constant on the population and $\|\Ppin-\PN\|_{\cF}=0$.
+\end{theorem}
+\begin{proof}
+  \uses{cor:han-5-4-upper}
+  \Cref{cor:han-5-4-upper} for $g=\|\Ppin-\PN\|_{\cF}$ with the supremum trick. The hypothesis $\Sigma_{\cF}<\infty$ makes $g$ finite: $|(\Ppin-\PN)f|\le(N/n)\,\PN|f-\PN f|\le(N/n)\Sigma_{\cF}$.
+\end{proof}
+\begin{remark}
+  The condition $\Sigma_{\cF}<\infty$ is added, so that $\|\Ppin-\PN\|_{\cF}$ is finite and can be centred; the case $\Sigma_{\cF}=0$, where the bound would divide by $0$, is stated separately.
+\end{remark}
+
+\section{Combinatorial Glivenko--Cantelli}
+
+\begin{definition}[Weakly $(\PN,\pi)$-Glivenko--Cantelli; \han{Definition 5.3}{114}]
+  \label{def:han-5-3-weak}
+  \uses{def:population}
+  \fid{as printed}
+  $\cF$ is weakly $(\PN,\pi)$-Glivenko--Cantelli if $\E\|\Ppin-\PN\|_{\cF}\to0$.
+\end{definition}
+
+\begin{definition}[Completely $(\PN,\pi)$-Glivenko--Cantelli; \han{Definition 5.3}{114}]
+  \label{def:han-5-3-strong}
+  \uses{def:population}
+  \fid{adapted}
+  $\cF$ is completely $(\PN,\pi)$-Glivenko--Cantelli if $\sum_N\Pr\bigl(\|\Ppin-\PN\|_{\cF}>\epsilon\bigr)<\infty$ for every $\epsilon>0$.
+\end{definition}
+\begin{remark}
+  The book's strong version asks for almost sure convergence without saying how the permutations for different $N$ are realized together. Complete convergence gives almost sure convergence for every such realization; the name records the difference. It does not imply the weak version (\cref{def:han-5-3-weak}).
+\end{remark}
+
+\begin{theorem}[Bracketing, version I; \han{Theorem 5.7}{114}]
+  \label{thm:han-5-7}
+  \uses{def:han-5-3-weak, def:han-4-14}
+  \fid{as printed}
+  Let $\cF$ have an envelope $F>0$ with $\limsup_N\Nbr(\cF,L^1(\PN),\epsilon)<\infty$ for every $\epsilon>0$, and assume $\PN F^2/\sqrt n\to0$ or $\limsup_N\PN F^{1+c}<\infty$ for some $c>0$. Then $\cF$ is weakly $(\PN,\pi)$-Glivenko--Cantelli.
+\end{theorem}
+\begin{proof}
+  \uses{cor:han-5-1, lem:han-2-1}
+  Reduce to i.i.d.\ sampling from $\PN$ by \cref{cor:han-5-1}; brackets truncated to $[-F,F]$; \cref{lem:han-2-1}.
+\end{proof}
+
+\begin{theorem}[Bracketing, version II; \han{Theorem 5.8}{116}]
+  \label{thm:han-5-8}
+  \uses{def:han-5-3-weak, def:han-4-14}
+  \fid{as printed}
+  If $F>0$ is an envelope with $\limsup_N\PN F^2<\infty$ and $N\log2\Nbr(\cF,L^1(\PN),\epsilon)/n^2\to0$ for every $\epsilon>0$, then $\cF$ is weakly $(\PN,\pi)$-Glivenko--Cantelli.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-5-2, lem:han-2-1}
+  \Cref{thm:han-5-2} and \cref{lem:han-2-1} with $\psi_2$.
+\end{proof}
+
+\begin{theorem}[Bracketing, version III; \han{Theorem 5.9}{117}]
+  \label{thm:han-5-9}
+  \uses{def:han-5-3-weak, def:han-4-14}
+  \fid{adapted}
+  If $F$ is an envelope of $\cF$ with $\limsup_N\PN F^{1+c}<\infty$ for some $c>0$ and $\log2\Nbr(\cF,L^1(\PN),\epsilon)/\sqrt n\to0$ for every $\epsilon>0$, then $\cF$ is weakly $(\PN,\pi)$-Glivenko--Cantelli.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-5-3, lem:han-2-1}
+  Truncation, \cref{thm:han-5-3} and \cref{lem:han-2-1} with $\psi_1$.
+\end{proof}
+
+\begin{theorem}[\han{Theorem 5.10}{118}]
+  \label{thm:han-5-10}
+  \uses{def:han-5-3-weak, def:lp-class-pseudometric}
+  \fid{adapted}
+  Let $F$ be a finite measurable envelope of $\cF$ with $\lim_{M\to\infty}\limsup_N\PN F\ind(F>M)=0$. If $\liminf_Nn/N>0$ and $N\log\cN(\cF,L^1(\PN),\epsilon\|F\|_{L^1(\PN)})/n^2\to0$ for every $\epsilon>0$, then $\cF$ is weakly $(\PN,\pi)$-Glivenko--Cantelli.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-5-2, lem:han-2-1}
+  Truncate the functions at $F\le M$; the rest contributes at most $2\PN F\ind(F>M)$. For the truncated class, approximating by a finite net in $L^1(\PN)$ costs at most $(1+N/n)$ times its radius, and \cref{thm:han-5-2} with \cref{lem:han-2-1} bounds the expected maximum over the net by a constant times $M\sqrt{\log(2\cN)/n}$, which tends to $0$. Let $N\to\infty$, then the radius tend to $0$, then $M\to\infty$.
+\end{proof}
+\begin{remark}
+  The book assumes that $(\PN,\cF)$ is ``$\mathrm P$-pre-Glivenko--Cantelli'', a notion it does not define. Its proof uses the uniform integrability of the envelope that is assumed here instead; no limiting measure $\mathrm P$ is needed.
+\end{remark}
+
+\begin{theorem}[\han{Theorem 5.11}{119}]
+  \label{thm:han-5-11}
+  \uses{def:han-5-3-weak, def:han-5-3-strong}
+  \fid{adapted}
+  Suppose that $\cF$ is weakly $(\PN,\pi)$-Glivenko--Cantelli and that $\sum_Nb_N(t)<\infty$ for every $t>0$, where, with $\Sigma_{\cF}$ as in \cref{thm:han-5-6} for the $N$-th population, $b_N(t)=\exp\bigl(-n^2t^2/(8N\Sigma_{\cF}^2)\bigr)$ if $0<\Sigma_{\cF}<\infty$, $b_N(t)=0$ if $\Sigma_{\cF}=0$, and $b_N(t)=1$ if $\Sigma_{\cF}=\infty$. Then $\cF$ is completely $(\PN,\pi)$-Glivenko--Cantelli.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-5-6}
+  Since $b_N(t)=1$ when $\Sigma_{\cF}=\infty$, the summability gives $\Sigma_{\cF}<\infty$ for all but finitely many $N$. If $\Sigma_{\cF}=0$, every $f$ is constant on the population and $\|\Ppin-\PN\|_{\cF}=0$. Given $\epsilon>0$, eventually $\E\|\Ppin-\PN\|_{\cF}<\epsilon/2$, and then \cref{thm:han-5-6} bounds $\Pr(\|\Ppin-\PN\|_{\cF}>\epsilon)$ by $b_N(\epsilon/2)$.
+\end{proof}
+\begin{remark}
+  The book states the strong version under the condition $\liminf_Nn^2/(N\Sigma_{\cF}^2\log n)>1$. Here the summability over $N$ of the bounds of \cref{thm:han-5-6}, which is what the proof uses, is assumed instead. A sufficient condition is $n^2/(N\Sigma_{\cF}^2\log N)\to\infty$.
+\end{remark}
+
+\section{Combinatorial Donsker theorems}
+
+\begin{definition}[$(\PN,\pi)$-Donsker; \han{Definition 5.4}{119}]
+  \label{def:han-5-4}
+  \uses{def:population, def:linf-weak-conv}
+  \fid{adapted}
+  Let $\cF$ satisfy $\sup_{f\in\cF}|f(z_i)|<\infty$ for every $N$ and $i$. $\cF$ is $(\PN,\pi)$-Donsker if there are a pseudo-metric $\rho$ for which $\cF$ is totally bounded and a Borel probability measure $\mathbb G$ on $\linf(\cF)$ with $\mathbb G(\UC(\cF,\rho))=1$ such that $\Gpin\Rightarrow\mathbb G$ in $\linf(\cF)$ (\cref{def:linf-weak-conv}).
+\end{definition}
+
+\begin{definition}[$\mathrm P$-pre-Donsker; \han{Definition 5.5}{119}]
+  \label{def:han-5-5}
+  \uses{def:population, def:lp-class-pseudometric}
+  \fid{as printed}
+  $(\PN,\cF)$ is $\mathrm P$-pre-Donsker if there is a probability measure $\mathrm P$ on a measurable space $(\cZ,\mathcal A)$ such that $(\cF,L^2(\mathrm P))$ is totally bounded and all $f,g\in\cF$ are $\mathcal A$-measurable and satisfy $\limsup_N\PN|f-\PN f|^3<\infty$, $\PN f\to\mathrm Pf$ and $\PN(fg)\to\mathrm P(fg)$.
+\end{definition}
+
+\begin{lemma}[Separability; \han{Lemma 5.5}{119}]
+  \label{lem:han-5-5}
+  \uses{def:population, def:han-2-5, def:lp-class-pseudometric}
+  \fid{as printed}
+  $\{\Gpin f\}_{f\in\cF}$ is separable in $(\cF,L^2(\PN))$, and in $(\cF,L^\infty)$ when that space is separable.
+\end{lemma}
+\begin{proof}
+  The paths are Lipschitz for $\|\cdot\|_{L^2(\PN)}$ with constant $(N+n)/\sqrt n$.
+\end{proof}
+
+\begin{lemma}[Stochastic equicontinuity; \han{Lemma 5.6}{120}]
+  \label{lem:han-5-6}
+  \uses{def:population, def:han-4-1, def:lp-class-pseudometric}
+  \fid{adapted}
+  $\E\sup_{\|f-g\|_{L^2(\PN)}\le\delta}|\Gpin(f-g)|\le72\sqrt{6N/n}\int_0^\delta\sqrt{\log2\cN(\cF,L^2(\PN),\epsilon)}\,d\epsilon$.
+\end{lemma}
+\begin{proof}
+  \uses{thm:han-5-2, lem:han-5-5, cor:han-4-1, lem:chaining-transfer, def:lp-class-pseudometric}
+  \Cref{cor:han-4-1} with $d=\sqrt{96N/n}\,\|\cdot\|_{L^2(\PN)}$ on $\cF$ (\cref{def:lp-class-pseudometric}): by \cref{thm:han-5-2}, $\|\Gpin f-\Gpin g\|_{\psi_2}\le d(f,g)$, since $1+N/n\le2N/n$. The class need not be countable, so \cref{cor:han-4-1} is applied through \cref{lem:chaining-transfer} with this $d$. Its hypotheses hold: the probability space $\SN$ is finite; at every $\pi$ the path $f\mapsto\Gpin f$ is Lipschitz for $\|\cdot\|_{L^2(\PN)}$ with constant $\sqrt n(N/n+1)=(N+n)/\sqrt n$, as in the proof of \cref{lem:han-5-5}; and $(\cF,L^2(\PN))$ is separable, because $f\mapsto(f(z_1),\dots,f(z_N))$ maps it isometrically into $\R^N$ with the norm $(N^{-1}\sum_ix_i^2)^{1/2}$.
+\end{proof}
+\begin{remark}
+  The book states the inequality under the assumption $\int_0^\infty\sqrt{\log2\cN(\cF,L^2(\PN),\epsilon)}\,d\epsilon<\infty$. The inequality holds without it, trivially when the right-hand side is infinite, so the assumption is left out.
+\end{remark}
+
+\begin{theorem}[Donsker, version I; \han{Theorem 5.12}{120}]
+  \label{thm:han-5-12}
+  \uses{def:han-5-4, def:han-5-5, def:lp-class-pseudometric}
+  \notready
+  \fid{as printed}
+  As printed: if (a) $n/N\to\gamma\in(0,1)$, (b) $(\PN,\cF)$ is $\mathrm P$-pre-Donsker, and (c) $\limsup_N\int_0^{\diam\cF}\sqrt{\log2\cN(\cF,L^2(\PN),\epsilon)}\,d\epsilon<\infty$, then $\cF$ is $(\PN,\pi)$-Donsker.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-2-5-suff, thm:han-5-5, lem:han-5-6}
+  \Cref{thm:han-2-5-suff}, with finite-dimensional convergence from \cref{thm:han-5-5} and equicontinuity from \cref{lem:han-5-6}.
+\end{proof}
+\begin{remark}
+  Not ready: the printed statement needs additional hypotheses before it can be formalized. The proof needs a comparison of the $L^2(\PN)$ and $L^2(\mathrm P)$ distances that is uniform over $\cF$, and a bound on the entropy integral near $0$ that is uniform in $N$. With both added, for example as $\lim_{a\to0}\limsup_N\sup\{\|f-g\|_{L^2(\PN)}:\|f-g\|_{L^2(\mathrm P)}\le a\}=0$ and $\lim_{b\to0}\limsup_N\int_0^b\sqrt{\log2\cN(\cF,L^2(\PN),\epsilon)}\,d\epsilon=0$, the conclusion can be proved.
+\end{remark}
+
+\begin{corollary}[Uniform entropy; \han{Corollary 5.5}{121}]
+  \label{cor:han-5-5}
+  \uses{def:han-5-4, def:han-5-5, def:uniform-entropy}
+  \notready
+  \fid{as printed}
+  As printed: under (a), (b) of \cref{thm:han-5-12}, an envelope $F>0$ with $\limsup_N\PN F^2<\infty$, and $J(\cF,F)<\infty$, $\cF$ is $(\PN,\pi)$-Donsker.
+\end{corollary}
+\begin{remark}
+  Not ready: the printed statement needs an additional hypothesis before it can be formalized. The uniform entropy condition already controls the entropy integral near $0$; what is missing, as in \cref{thm:han-5-12}, is the comparison of the $L^2(\PN)$ and $L^2(\mathrm P)$ distances, which the other hypotheses, including the envelope condition, do not supply.
+\end{remark}
+
+\begin{theorem}[Donsker, version II; \han{Theorem 5.13}{122}]
+  \label{thm:han-5-13}
+  \uses{def:han-5-4, def:han-5-5, def:uniform-entropy, def:lp-class-pseudometric}
+  \notready
+  \fid{as printed}
+  As printed: if $F>0$ is an envelope, $(\PN,\cF)$ is $\mathrm P$-pre-Donsker, $n/N\to\gamma\in[0,1)$, $\int_0^2\sup_Q\sqrt{\log\cN(\cF,L^2(Q),\epsilon\|F\|_{L^2(Q)})}\,d\epsilon<\infty$ and $\limsup_N\PN F^2<\infty$, then $\cF$ is $(\PN,\pi)$-Donsker.
+\end{theorem}
+\begin{remark}
+  Not ready: the printed statement needs additional hypotheses before it can be formalized. As in \cref{thm:han-5-12}, the comparison of the $L^2(\PN)$ and $L^2(\mathrm P)$ distances is missing, also when $\gamma\in(0,1)$. A corrected version needs the comparison of the distances and, to keep $\gamma=0$, a Lindeberg condition on the envelope.
+\end{remark}
+
+\begin{theorem}[Donsker, version III; \han{Theorem 5.14}{122}]
+  \label{thm:han-5-14}
+  \uses{def:han-5-4, def:han-5-5, def:han-4-14}
+  \notready
+  \fid{as printed}
+  As printed: if $(\PN,\cF)$ is $\mathrm P$-pre-Donsker, $n/N\to\gamma\in[0,1)$, $\limsup_N\int_0^{\diam\cF}\sqrt{\log\Nbr(\cF,L^2(\PN),\epsilon)}\,d\epsilon<\infty$ and $\limsup_N\PN F^2<\infty$, then $\cF$ is $(\PN,\pi)$-Donsker.
+\end{theorem}
+\begin{remark}
+  Not ready: the printed statement needs additional hypotheses before it can be formalized. As in \cref{thm:han-5-12}, the comparison of the $L^2(\PN)$ and $L^2(\mathrm P)$ distances is missing, and the bracketing condition does not supply it. The book does not introduce $F$ as an envelope.
+\end{remark}
+
+\section{Generic chaining}
+
+\begin{definition}[Entropy numbers and $\gamma$-functionals; \han{Definitions 5.6--5.7}{123}]
+  \label{def:han-5-6}
+  \fid{as printed}
+  Let $N_0=1$ and $N_k=2^{2^k}$ for $k\ge1$. For a pseudo-metric space $(T,d)$, $e_k(T,d)=\inf\{\sup_{t\in T}d(t,T_k):T_k\subseteq T,\ |T_k|\le N_k\}$. For $\alpha>0$, $\gamma_\alpha(T,d)=\inf\sup_{t\in T}\sum_{k\ge0}2^{k/\alpha}\diam(A_k(t))$, the infimum over increasing sequences of partitions $(\mathcal A_k)$ of $T$ with $|\mathcal A_k|\le N_k$, where $A_k(t)$ is the element of $\mathcal A_k$ containing $t$.
+\end{definition}
+
+\begin{theorem}[Generic chaining bound; \han{Theorem 5.15}{123}]
+  \label{thm:han-5-15}
+  \uses{def:han-5-6, def:han-2-5, def:han-2-11}
+  \fid{as printed}
+  There is a universal $K$ such that every centred separable process with $\|X(s)-X(t)\|_{\psi_2}\le d(s,t)$ satisfies $\E\sup_tX(t)\le K\gamma_2(T,d)$.
+\end{theorem}
+\begin{remark}
+  Cited in the book (Talagrand, 2014, Theorem 2.2.22). Not checked.
+
+  No other node of this blueprint uses it. On a countable index set every process is separable in the sense of \cref{def:han-2-5} (take $S=T$).
+\end{remark}
+
+\begin{theorem}[Bernstein-type chaining; \han{Theorem 5.17}{124}]
+  \label{thm:han-5-17}
+  \uses{def:han-5-6, def:han-2-5}
+  \fid{as printed}
+  If $X$ is centred, separable for $d_1$ and $d_2$, and satisfies (5.3): $\Pr(|X(s)-X(t)|\ge u)\le2\exp\bigl(-\frac{u^2/2}{d_2(s,t)^2+ud_1(s,t)}\bigr)$ for all $s,t$ and $u>0$, then $\E\sup_{s,t}|X(s)-X(t)|\le K\{\gamma_1(T,d_1)+\gamma_2(T,d_2)\}$.
+\end{theorem}
+\begin{remark}
+  Cited in the book (Talagrand, 2014, Theorem 2.2.23). Not checked.
+
+  In this blueprint it is used only through \cref{cor:han-5-6} in the proof of \cref{cor:han-5-7}, on a countable index set given by \cref{lem:chaining-transfer}. On a countable index set every process is separable in the sense of \cref{def:han-2-5} for any pseudo-metric (take $S=T$).
+\end{remark}
+
+\begin{lemma}[\han{Lemma 5.7}{124}]
+  \label{lem:han-5-7}
+  \uses{def:han-5-6}
+  \fid{as printed}
+  $\gamma_\alpha(T,d)\le K(\alpha)\sum_{k\ge0}2^{k/\alpha}e_k(T,d)$.
+\end{lemma}
+\begin{remark}
+  Cited in the book (Talagrand, 2014, Corollary 2.3.2). Not checked.
+\end{remark}
+
+\begin{corollary}[\han{Corollary 5.6}{124}]
+  \label{cor:han-5-6}
+  \uses{thm:han-5-17, def:han-4-1}
+  \fid{adapted}
+  Under the hypotheses of \cref{thm:han-5-17}, $\E\sup_{s,t}|X(s)-X(t)|\le K\Bigl\{\int_0^{\diam(T;d_2)}\sqrt{\log2\cN(T,d_2,\epsilon)}\,d\epsilon+\int_0^{\diam(T;d_1)}\log2\cN(T,d_1,\epsilon)\,d\epsilon\Bigr\}$.
+\end{corollary}
+\begin{proof}
+  \uses{thm:han-5-17, lem:han-5-7}
+  \Cref{thm:han-5-17,lem:han-5-7}, $e_k=\inf\{\epsilon:\cN(T,d,\epsilon)\le N_k\}$, and Abel summation.
+\end{proof}
+\begin{remark}
+  Stated with the internal covering numbers. In this blueprint it is applied only in the proof of \cref{cor:han-5-7}, to a countable index set given by \cref{lem:chaining-transfer}.
+\end{remark}
+
+\begin{lemma}[Uniform convergence of the $L^2(\PN)$ distances]
+  \label{lem:fixed-net-distances}
+  \uses{def:population, def:lp-class-pseudometric, def:han-4-1}
+  \fid{new}
+  Let $\mathrm P$ be a probability measure on a measurable space $(\cZ,\mathcal A)$, and let $\cF$ be a class of $\mathcal A$-measurable functions in $L^2(\mathrm P)$ such that $\PN(fg)\to\mathrm P(fg)$ for all $f,g\in\cF$. Let $d_\infty(f,g)=\sup_{z\in\cZ}|f(z)-g(z)|$, which may be infinite, and suppose that $\cN(\cF,d_\infty,r)<\infty$ for every $r>0$. Then
+  \[
+    \sup_{f,g\in\cF}\Bigl|\|f-g\|_{L^2(\PN)}-\|f-g\|_{L^2(\mathrm P)}\Bigr|\to0.
+  \]
+\end{lemma}
+\begin{proof}
+  Write $d_N$ and $d$ for the $L^2(\PN)$ and $L^2(\mathrm P)$ distances on $\cF$. Both are at most $d_\infty$, because $\PN$ and $\mathrm P$ are probability measures. Fix $r>0$ and a finite set $T_r\subseteq\cF$ such that every $f\in\cF$ has $d_\infty(f,s)\le r$ for some $s\in T_r$; it exists by hypothesis and does not depend on $N$. For $f,g\in\cF$ choose such $s,t\in T_r$. By the triangle inequality for $d_N$ and for $d$, $|d_N(f,g)-d_N(s,t)|\le d_N(f,s)+d_N(g,t)\le2r$ and $|d(f,g)-d(s,t)|\le2r$, so
+  \[
+    |d_N(f,g)-d(f,g)|\le4r+\max_{s,t\in T_r}|d_N(s,t)-d(s,t)|.
+  \]
+  For fixed $s,t$, $d_N(s,t)^2=\PN s^2-2\PN(st)+\PN t^2\to\mathrm Ps^2-2\mathrm P(st)+\mathrm Pt^2=d(s,t)^2$, so $d_N(s,t)\to d(s,t)$. The maximum is over finitely many pairs, so it tends to $0$, and the supremum over $f,g$ is eventually at most $5r$. Since $r>0$ is arbitrary, the supremum tends to $0$.
+\end{proof}
+
+\begin{corollary}[\han{Corollary 5.7}{126}]
+  \label{cor:han-5-7}
+  \uses{def:population, def:han-5-4, def:han-5-5, def:han-4-1}
+  \fid{adapted}
+  Let $F\ge1$ be an envelope of $\cF$ with $\limsup_N\PN F^2<\infty$, and let $\epsilon_N\to\infty$ with $n^{-1/2}\int_0^{2\epsilon_N\sqrt n}\log\cN(\cF,L^\infty,\epsilon)\,d\epsilon\to0$, where $L^\infty$ is the distance $\sup_{z\in\cZ}|f(z)-g(z)|$ on $\cF$, which may be infinite. Then $\lim_{\delta\to0}\limsup_N\E\sup_{\|f-g\|_{L^2(\PN)}\le\delta}|\Gpin(f-g)|=0$. If moreover $(\PN,\cF)$ is $\mathrm P$-pre-Donsker and $n/N\to\gamma\in[0,1)$, then $\cF$ is $(\PN,\pi)$-Donsker.
+\end{corollary}
+\begin{proof}
+  \uses{lem:han-4-1, lem:han-5-2, def:array, thm:han-3-7, lem:han-5-3, lem:han-5-5, thm:han-2-7, lem:covering-subset, lem:chaining-transfer, cor:han-5-6, lem:fixed-net-distances, thm:han-5-5, thm:han-2-5-suff, def:aec, def:lp-class-pseudometric}
+  Let $\cF$ be nonempty and $N\ge2$. Write $d_N$, $d$ and $d_\infty$ for the $L^2(\PN)$, $L^2(\mathrm P)$ and $L^\infty$ distances on $\cF$, and $N_\infty(u)=\cN(\cF,L^\infty,u)$.
+
+  \emph{The entropy condition.} If $N_\infty(u_0)=\infty$ for some $u_0>0$, then $N_\infty=\infty$ on $(0,u_0]$ by \cref{lem:han-4-1}, and the normalized integral is infinite as soon as $2\epsilon_N\sqrt n>u_0$. If no single ball of finite radius covered $\cF$, the integrand would be at least $\log2$ and the normalized integral at least $2\epsilon_N\log2$. Hence $N_\infty(u)<\infty$ for every $u>0$, $\cF$ has a finite $L^\infty$-diameter $D$, $N_\infty(u)=1$ for $u\ge D$, and $A=\int_0^D\log N_\infty(u)\,du<\infty$.
+
+  \emph{Tails of the increments.} By \cref{lem:han-5-2}, $\Gpin f-\Gpin g=\sqrt n\sum_id_{i\pi(i)}$ for the doubly centred array $d_{ij}=h(z_i)\bigl(\ind(j\le n)-n/N\bigr)/n$, where $h=(f-g)-\PN(f-g)$. Since $\sum_j(\ind(j\le n)-n/N)^2=n(1-n/N)$, this array has $\sigma_A^2=\frac{N-n}{(N-1)n}\PN h^2\le d_N(f,g)^2/n$ and $B_A\le2d_\infty(f,g)/n$ (\cref{def:array}). \Cref{thm:han-3-7}, applied to the array and to its negative, gives for $u>0$
+  \[
+    \Pr\bigl(|\Gpin f-\Gpin g|\ge u\bigr)\le2\exp\Bigl(-\frac{u^2/2}{6\,d_N(f,g)^2+4\sqrt2\,n^{-1/2}d_\infty(f,g)\,u}\Bigr),
+  \]
+  which is (5.3) with $d_2=\sqrt6\,d_N$ and $d_1=4\sqrt2\,n^{-1/2}d_\infty$.
+
+  \emph{The modulus.} The class need not be countable. By \cref{lem:chaining-transfer}(i) with the distance $d_N$, whose hypotheses hold as in the proof of \cref{lem:han-5-6}, there is a countable $\cF_0\subseteq\cF$ such that the supremum over the pairs $(f,g)\in\cF^2$ with $d_N(f,g)\le\delta$ equals the supremum over the set $H$ of such pairs in $\cF_0^2$. Apply \cref{cor:han-5-6} to the centred process $Y(f,g)=\Gpin f-\Gpin g$ on the countable set $H$, which contains the pairs $(f,f)$, where $Y=0$; so $\E\sup_H|Y|$ is at most the left-hand side of \cref{cor:han-5-6}. The increments $Y(f,g)-Y(f',g')$ are increments of $\Gpin$ between $f-g$ and $f'-g'$, so they satisfy (5.3) with $\sqrt6\,d_N(f-g,f'-g')$ and $4\sqrt2\,n^{-1/2}d_\infty(f-g,f'-g')$. These are pseudo-metrics on $H$. If both vanish for two pairs, (5.3) gives $Y$ the same value at the two pairs almost surely; $H$ is countable, so this holds for all such pairs at once, and \cref{cor:han-5-6} can be applied on the quotient of $H$ that identifies them, with the same supremum almost surely. The first is at most $2\sqrt6\,\delta$ on $H$; both are at most constant multiples of $\rho((f,g),(f',g'))=d_\infty(f,f')+d_\infty(g,g')$, and the products of the centres of two internal $u/4$-covers of $\cF$ form an internal $u/2$-cover of $\cF^2$ for $\rho$, so by \cref{lem:covering-subset} the internal covering numbers of $H$ satisfy $\cN(H,\rho,u)\le N_\infty(u/4)^2$. So the $d_2$-integral of \cref{cor:han-5-6} is at most a constant times $\int_0^{\delta/2}\sqrt{\log2+2\log N_\infty(u)}\,du$, which does not depend on $N$ and tends to $0$ as $\delta\to0$ because $A<\infty$; and the $d_1$-integral is at most a constant times $n^{-1/2}(D+A)$, which tends to $0$ as $N\to\infty$. This proves the first claim.
+
+  \emph{The Donsker conclusion.} Take $\rho=d$, for which $\cF$ is totally bounded by the pre-Donsker hypothesis. The paths are bounded, $|\Gpin f|\le2\sqrt n\max_iF(z_i)$, and every map on the finite space $\SN$ is measurable, so $\Gpin$ is a Borel measurable map into $\linf(\cF)$. Finite-dimensional convergence comes from \cref{thm:han-5-5}, whose hypotheses are those of pre-Donsker and $n/N\to\gamma$. By \cref{lem:fixed-net-distances}, which applies because $N_\infty(r)<\infty$ for every $r>0$, $\eta_N=\sup_{f,g}|d_N(f,g)-d(f,g)|\to0$; once $\eta_N\le\delta$, every pair with $d(f,g)<\delta$ has $d_N(f,g)\le2\delta$. By Markov's inequality and the first claim,
+  \[
+    \limsup_N\Pr\Bigl(\sup_{d(f,g)<\delta}|\Gpin f-\Gpin g|>\epsilon\Bigr)\le\epsilon^{-1}\limsup_N\E\sup_{d_N(f,g)\le2\delta}|\Gpin(f-g)|\to0\quad(\delta\to0),
+  \]
+  which is asymptotic equicontinuity (\cref{def:aec}). \Cref{thm:han-2-5-suff} gives weak convergence to a limit that gives $\UC(\cF,d)$ measure one, and the envelope gives $\sup_f|f(z_i)|<\infty$, so $\cF$ is $(\PN,\pi)$-Donsker.
+\end{proof}
+\begin{remark}
+  The long integral is written with $\log\cN$, where the book has $\log2\cN$; with $\log\cN$ the integrand vanishes at the radii where one ball covers $\cF$, as the proof uses. The book also assumes a bounded $L^2(\PN)$ entropy integral, which follows from the condition here and is left out; and the limit $n/N\to\gamma$, which the finite-dimensional convergence uses, is added to the Donsker conclusion. The book does not define $L^\infty$ for a class of functions; here it is the supremum over $\cZ$, not the maximum over the population of \cref{def:population}. Because this distance does not depend on $N$, one finite net serves every $N$, which is what \cref{lem:fixed-net-distances} uses.
+\end{remark}
+
+\section{Examples}
+
+\begin{corollary}[Two-sample permutation process; \han{Corollary 5.8}{128}]
+  \label{cor:han-5-8}
+  \uses{def:han-5-4, def:han-5-5, def:lp-class-pseudometric}
+  \notready
+  \fid{as printed}
+  As printed: for pooled samples $x_1,\dots,x_m$ and $y_1,\dots,y_n$ with $N=m+n$ and $m/N\to\gamma\in(0,1)$, if $(\PN,\cF)$ and $(\mathrm Q_N,\cF)$ are $\mathrm P$- and $\mathrm Q$-pre-Donsker and both $L^2$ entropy integrals are bounded in $\limsup$, then $\sqrt m(\mathbb P_{\pi,m}-\mathrm H_N)\Rightarrow\sqrt{1-\gamma}\,\mathbb B_{\mathrm H}$, where $\mathrm H_N=\frac mN\PN+\frac nN\mathrm Q_N$ and $\mathbb B_{\mathrm H}$ is the $\mathrm H$-bridge, $\mathrm H=\gamma\mathrm P+(1-\gamma)\mathrm Q$.
+\end{corollary}
+\begin{remark}
+  Not ready: the printed statement needs additional hypotheses before it can be formalized. The hypotheses are placed on the two samples separately, but the pooled process is a permutation process for $\mathrm H_N$, and the conditions missing from \cref{thm:han-5-12} are missing for $\mathrm H_N$ too; hypotheses on each sample do not supply them. A corrected version would put the hypotheses of a corrected \cref{thm:han-5-12} on the pooled laws $\mathrm H_N$.
+\end{remark}
+
+\begin{proposition}[Mean absolute deviation; \han{Proposition 5.1}{129}]
+  \label{prop:han-5-1}
+  \uses{def:population}
+  \fid{adapted}
+  For a real population, with $\widehat M_n=\Ppin|z-\Ppin z|$ and $M_N=\PN|z-\PN z|$,
+  $\E|\widehat M_n-M_N|\le C\,\|z-\PN z\|_{L^2(\PN)}/\sqrt n$ for a universal constant $C$.
+\end{proposition}
+\begin{proof}
+  \uses{lem:han-5-3}
+  $|\widehat M_n-M_N|\le|\Ppin z-\PN z|+|(\Ppin-\PN)|z-\PN z||$; bound each term by its standard deviation (\cref{lem:han-5-3}), which gives $C=2$ for every $n\le N$.
+\end{proof}
+\begin{remark}
+  For the first term the proof uses \cref{lem:han-5-3}, which gives the rate $n^{-1/2}$ for every $n\le N$; the sub-Gaussian bound of \cref{thm:han-5-2} gives it when $n/N$ stays away from $0$.
+\end{remark}

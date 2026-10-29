@@ -1,0 +1,225 @@
+\chapter{Empirical processes}
+\label{chap:empirical}
+
+Background results that later chapters do not use are not included: Theorem 4.2 (Dvoretzky--Kiefer--Wolfowitz--Massart), Theorem 4.8 (Talagrand--Bousquet), Propositions 4.2--4.3 (entropy of H\"older and bounded-variation classes) and Example 4.7.
+
+\section{Setting}
+
+\begin{definition}[Empirical measure and empirical process; \han{\S4.3, Definition 4.3}{78}]
+  \label{def:empirical}
+  \fid{adapted}
+  Let $X_1,X_2,\dots$ be i.i.d.\ random elements of a measurable space $\cX$ with law $\mathrm P$, and $\cF$ a countable class of measurable functions on $\cX$. Put $\Pn=n^{-1}\sum_{i\le n}\delta_{X_i}$, $Qg=\int g\,dQ$, $\|\Pn-\mathrm P\|_{\cF}=\sup_{f\in\cF}|(\Pn-\mathrm P)f|$ and $\Gn f=\sqrt n(\Pn-\mathrm P)f$. An envelope of $\cF$ is a measurable $F$ with $|f|\le F$ for all $f\in\cF$; condition (4.1) asks for an envelope with $F\ge1$ and $\mathrm PF^2<\infty$. The intrinsic pseudo-metric is $d_{\mathrm P}(f,g)^2=\mathrm P(f-g)^2-(\mathrm P(f-g))^2$.
+\end{definition}
+
+\begin{definition}[Glivenko--Cantelli class; \han{Definition 4.4}{79}]
+  \label{def:han-4-4}
+  \uses{def:empirical}
+  \fid{as printed}
+  $\cF$ is weakly $\mathrm P$-Glivenko--Cantelli if $\E\|\Pn-\mathrm P\|_{\cF}\to0$, and strongly $\mathrm P$-Glivenko--Cantelli if $\|\Pn-\mathrm P\|_{\cF}\to0$ almost surely.
+\end{definition}
+
+\begin{definition}[Uniform entropy condition; \han{\S4.5, (4.3)}{84}]
+  \label{def:uniform-entropy}
+  \uses{def:empirical, def:han-4-1, def:lp-class-pseudometric}
+  \fid{adapted}
+  For a class $\cF$ with envelope $F$, $J(\cF,F)=\int_0^2\sup_Q\sqrt{\log2\cN\bigl(\cF,L^2(Q),\epsilon\|F\|_{L^2(Q)}\bigr)}\,d\epsilon$, where the supremum is over the finitely discrete probability measures $Q$ with $QF^2>0$ and $\cN$ is the internal covering number. Condition (4.3) is $J(\cF,F)<\infty$.
+\end{definition}
+
+\section{Glivenko--Cantelli theorems}
+
+\begin{theorem}[Glivenko--Cantelli; \han{Theorem 4.1}{71}]
+  \label{thm:han-4-1}
+  \fid{as printed}
+  If $X_1,X_2,\dots$ are i.i.d.\ real random variables with distribution function $F$ and $F_n$ is the empirical distribution function of $X_1,\dots,X_n$, then $\sup_{t\in\R}|F_n(t)-F(t)|\to0$ almost surely.
+\end{theorem}
+\begin{proof}
+  \uses{thm:strong-law}
+  Quantile transformation, the strong law (\cref{thm:strong-law}) on a grid, and monotonicity.
+\end{proof}
+
+\begin{lemma}[Symmetrization; \han{Lemma 4.2}{81}]
+  \label{lem:han-4-2}
+  \uses{def:empirical, def:rademacher}
+  \fid{adapted}
+  For a countable class $\mathcal G$ of $\mathrm P$-integrable functions and i.i.d.\ Rademacher variables $\epsilon_1,\dots,\epsilon_n$ independent of $X_1,\dots,X_n$,
+  $\E\sup_{g\in\mathcal G}|(\Pn-\mathrm P)g|\le2\,\E\sup_{g\in\mathcal G}\bigl|n^{-1}\sum_i\epsilon_ig(X_i)\bigr|$.
+\end{lemma}
+
+\begin{theorem}[$\mathrm P$-Glivenko--Cantelli; \han{Theorem 4.7}{81}]
+  \label{thm:han-4-7}
+  \uses{def:han-4-4, def:han-4-1, def:lp-class-pseudometric}
+  \fid{adapted}
+  Let $\cF$ be countable with an envelope $F>0$, $\mathrm PF<\infty$, and suppose that for every $\epsilon>0$, almost surely, $n^{-1}\log\cN\bigl(\cF,L^1(\Pn),\epsilon\|F\|_{L^1(\Pn)}\bigr)\to0$. Then $\cF$ is weakly and strongly $\mathrm P$-Glivenko--Cantelli.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-4-2, lem:rademacher-psi2, lem:han-2-1, thm:strong-law}
+  Truncate at $F\le M$, symmetrize (\cref{lem:han-4-2}), and bound the Rademacher process on a net with \cref{lem:rademacher-psi2,lem:han-2-1}; \cref{thm:strong-law} for $\Pn F$. The strong part is cited (van der Vaart and Wellner, 1996, Lemma 2.4.5).
+\end{proof}
+\begin{remark}
+  After symmetrization, the argument bounds the expectation of the Rademacher average conditionally on the data, and then takes expectations.
+\end{remark}
+
+\section{Donsker theorems}
+
+\begin{definition}[$\mathrm P$-pre-Gaussian; \han{Definition 4.5}{80}]
+  \label{def:han-4-5}
+  \uses{def:empirical, def:han-2-6}
+  \fid{as printed}
+  The $\mathrm P$-bridge $\mathbb G_{\mathrm P}$ is the centred Gaussian process indexed by $\cF$ with covariance $\mathrm P(f-\mathrm Pf)(g-\mathrm Pg)$. $\cF$ is $\mathrm P$-pre-Gaussian if $\mathbb G_{\mathrm P}$ has a version whose sample paths are bounded and uniformly $d_{\mathrm P}$-continuous.
+\end{definition}
+
+\begin{definition}[$\mathrm P$-Donsker; \han{Definition 4.6}{80}]
+  \label{def:han-4-6}
+  \uses{def:han-4-5, def:han-2-8}
+  \notready
+  \fid{as printed}
+  Assume (4.2): $\sup_{f\in\cF}|f(x)-\mathrm Pf|<\infty$ for $\mathrm P$-almost every $x$. Then $\cF$ is $\mathrm P$-Donsker if it is $\mathrm P$-pre-Gaussian and $\Gn\Rightarrow\mathbb G_{\mathrm P}$ in $\linf(\cF)$.
+\end{definition}
+\begin{remark}
+  Not ready: $\Gn$ is in general not a Borel measurable map into $\linf(\cF)$, even for countable $\cF$, so weak convergence must be taken in the outer sense (\cref{def:han-2-8}), which is not yet in this blueprint.
+\end{remark}
+
+\begin{theorem}[Donsker; \han{Theorem 4.3}{73}]
+  \label{thm:han-4-3}
+  \uses{def:han-2-8}
+  \notready
+  \fid{as printed}
+  For i.i.d.\ real $X_i$ with distribution function $F$, $\{\sqrt n(F_n(t)-F(t))\}_{t\in\R}$ converges weakly in $\linf(\R)$ to a centred Gaussian process $Z$ with $\Cov(Z(s),Z(t))=F(s\wedge t)-F(s)F(t)$.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-2-5-suff, cor:han-4-3-aec, lem:han-ex-4-2, lem:han-exr-4-4, thm:han-4-11}
+  The book only says that it follows from Theorem 2.5. The equicontinuity comes from \cref{cor:han-4-3-aec} and the VC property of half-lines.
+\end{proof}
+\begin{remark}
+  Not ready: it needs weak convergence in the outer sense (\cref{def:han-2-8}). The book gives no proof.
+\end{remark}
+
+\begin{theorem}[Characterization of Donsker classes, ``if''; \han{Theorem 4.6}{80}]
+  \label{thm:han-4-6-if}
+  \uses{def:han-4-6}
+  \notready
+  \fid{as printed}
+  Let $\cF$ be countable and satisfy (4.1) and (4.2). If there is a pseudo-metric $d$ on $\cF$ for which $\cF$ is totally bounded and $\lim_{\delta\to0}\limsup_n\Pr\{\sup_{d(f,g)\le\delta}|\Gn f-\Gn g|\ge\epsilon\}=0$ for every $\epsilon>0$, then $\cF$ is $\mathrm P$-Donsker.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-2-5-suff, cor:clt-iid-multivariate}
+  The book says that Theorem 2.5 ``immediately translates''; finite-dimensional convergence is the multivariate CLT.
+\end{proof}
+\begin{remark}
+  Not ready: it needs weak convergence in the outer sense (\cref{def:han-2-8}). A proof also has to show that the limit is $\mathrm P$-pre-Gaussian in the sense of \cref{def:han-4-5}.
+\end{remark}
+
+\begin{theorem}[Characterization of Donsker classes, ``only if''; \han{Theorem 4.6}{80}]
+  \label{thm:han-4-6-onlyif}
+  \uses{def:han-4-6}
+  \notready
+  \fid{as printed}
+  Conversely, if $\cF$ is $\mathrm P$-Donsker, such a pseudo-metric exists.
+\end{theorem}
+\begin{proof}
+  \uses{thm:han-2-5-nec}
+  From \cref{thm:han-2-5-nec}.
+\end{proof}
+\begin{remark}
+  Not ready: it needs weak convergence in the outer sense (\cref{def:han-2-8}) and the necessity direction \cref{thm:han-2-5-nec}, which is deferred.
+\end{remark}
+
+\begin{theorem}[Master theorem; \han{Theorem 4.9}{84}]
+  \label{thm:han-4-9}
+  \uses{def:uniform-entropy}
+  \fid{adapted}
+  If $0\in\cF$, $\cF$ is countable and satisfies (4.1) and (4.3), then (4.2) holds and
+  $\E\sup_{f\in\cF}|\Gn f|\le8\sqrt6\,\|F\|_{L^2(\mathrm P)}\,J(\cF,F)$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-4-2, lem:rademacher-psi2, lem:chaining-one-sided}
+  (4.2) follows from $|f(x)-\mathrm Pf|\le F(x)+\mathrm PF$. By \cref{lem:han-4-2}, $\E\sup_f|\Gn f|\le2\,\E\sup_f|R_nf|$ with $R_nf=n^{-1/2}\sum_i\epsilon_if(X_i)$. Conditionally on the data, $\|R_nf-R_ng\|_{\psi_2}\le d(f,g)$ for $d=\sqrt6\,\|\cdot\|_{L^2(\Pn)}$ (\cref{lem:rademacher-psi2}). Since $0\in\cF$, $\sup_f|R_nf|=\sup_f|R_nf-R_n0|$, and \cref{lem:chaining-one-sided}(i) with $t_0=0$ bounds its conditional expectation by $4\int_0^{D}\psi_2^{-1}(\cN(\cF,d,\epsilon))\,d\epsilon$, where $D\le2\sqrt6\,\|F\|_{L^2(\Pn)}$ is the $d$-diameter of $\cF$. With $\psi_2^{-1}(x)\le\sqrt{\log2x}$ and the change of variables $\epsilon=\sqrt6\,u\|F\|_{L^2(\Pn)}$ this is at most $4\sqrt6\,\|F\|_{L^2(\Pn)}J(\cF,F)$. Take expectations and use $\E\|F\|_{L^2(\Pn)}\le\|F\|_{L^2(\mathrm P)}$.
+\end{proof}
+\begin{remark}
+  Because $0\in\cF$, the proof uses the one-sided bound of \cref{lem:chaining-one-sided}, with constant $4$, instead of the two-sided bound of \cref{thm:han-4-4}; with the factor $2$ from symmetrization this gives the constant $8\sqrt6$ of the book. The statement is adapted only because $J(\cF,F)$ uses Mathlib's covering numbers.
+\end{remark}
+\begin{remark}
+  An alternative route gives the smaller constant $8\sqrt2$. Conditionally on the data, $R_nf-R_ng$ has a sub-Gaussian moment generating function with variance proxy $\|f-g\|_{L^2(\Pn)}^2$, because $\cosh x\le e^{x^2/2}$; and the maximum of $M$ such variables with proxy $v^2$ has expectation at most $v\sqrt{2\log(2M)}$ (\cref{lem:subgaussian-max}). Chaining with these bounds instead of $\psi_2$-norms gives $4\sqrt2$ for the Rademacher process and $8\sqrt2$ after symmetrization; compare Gin\'e and Nickl (2016), Theorem 3.5.1 and Remarks 3.5.2 and 3.5.5. This route needs a chaining lemma for sub-Gaussian moment generating functions, which is not a node here.
+\end{remark}
+
+\begin{lemma}[Covering numbers of differences; \han{Lemma 4.3}{85}]
+  \label{lem:han-4-3}
+  \uses{def:han-4-1, def:lp-class-pseudometric}
+  \fid{adapted}
+  For a measure $Q$, a class $\cF$ and $p\in[1,\infty]$, with $\cF^{\mathrm{diff}}=\{f-g:f,g\in\cF\}$,
+  $\cN(\cF^{\mathrm{diff}},L^p(Q),\epsilon)\le\cN(\cF,L^p(Q),\epsilon/2)^2$.
+\end{lemma}
+\begin{proof}
+  Exercise 4.3 of the book.
+\end{proof}
+
+\begin{lemma}[\han{Lemma 4.4}{86}]
+  \label{lem:han-4-4}
+  \uses{def:han-4-4, def:uniform-entropy}
+  \fid{adapted}
+  Under the hypotheses of \cref{cor:han-4-3-aec}, the class $\{h^2:h\in\cF_\delta\}$, where $\cF_\delta=\{f-g:f,g\in\cF,\ \|f-g\|_{L^2(\mathrm P)}<\delta\}$, is $\mathrm P$-Glivenko--Cantelli.
+\end{lemma}
+\begin{proof}
+  \uses{thm:han-4-7, lem:han-4-3, def:lp-class-pseudometric}
+  \Cref{thm:han-4-7} with envelope $4F^2$ and \cref{lem:han-4-3}.
+\end{proof}
+
+\begin{corollary}[Asymptotic equicontinuity; \han{Corollary 4.3}{85}]
+  \label{cor:han-4-3-aec}
+  \uses{def:uniform-entropy}
+  \fid{adapted}
+  If $\cF$ is countable and satisfies (4.1) and (4.3), then
+  $\lim_{\delta\to0}\limsup_n\E\sup_{\|f-g\|_{L^2(\mathrm P)}<\delta}|\Gn(f-g)|=0$.
+\end{corollary}
+\begin{proof}
+  \uses{thm:han-4-9, lem:han-4-3, lem:han-4-4, thm:han-4-7}
+  The argument of \cref{thm:han-4-9} applied to $\cF_\delta$, with \cref{lem:han-4-3,lem:han-4-4}.
+\end{proof}
+\begin{remark}
+  The argument keeps the relative scale $\epsilon\|F\|_{L^2(Q)}$ at $Q=\Pn$ throughout, which is the scale that (4.3) controls; this matters when the envelope is unbounded.
+\end{remark}
+
+\begin{corollary}[Donsker under uniform entropy; \han{Corollary 4.3}{85}]
+  \label{cor:han-4-3-donsker}
+  \uses{def:han-4-6, def:uniform-entropy}
+  \notready
+  \fid{adapted}
+  Under the hypotheses of \cref{cor:han-4-3-aec}, $\cF$ is $\mathrm P$-Donsker.
+\end{corollary}
+\begin{proof}
+  \uses{cor:han-4-3-aec, thm:han-4-6-if}
+  \Cref{cor:han-4-3-aec} and \cref{thm:han-4-6-if}.
+\end{proof}
+\begin{remark}
+  Not ready: it needs weak convergence in the outer sense (\cref{def:han-2-8}).
+\end{remark}
+
+\section{Bracketing}
+
+\begin{definition}[Brackets; \han{Definition 4.14}{96}]
+  \label{def:han-4-14}
+  \fid{as printed}
+  For functions $l\le u$ the bracket $[l,u]$ is the set of $f$ with $l\le f\le u$; it is an $\epsilon$-bracket for a norm $\|\cdot\|$ if $\|u-l\|\le\epsilon$ ($l,u$ need not belong to $\cF$). The bracketing number $\Nbr(\cF,\|\cdot\|,\epsilon)$ is the least number of $\epsilon$-brackets that cover $\cF$.
+\end{definition}
+
+\begin{lemma}[Covering by brackets; \han{Lemma 4.9}{96}]
+  \label{lem:han-4-9}
+  \uses{def:han-4-14, def:han-4-1}
+  \fid{adapted}
+  For a norm with $|f|\le|g|\Rightarrow\|f\|\le\|g\|$,
+  $\cNext(\cF,\|\cdot\|,\epsilon)\le\Nbr(\cF,\|\cdot\|,2\epsilon)$ and $\cN(\cF,\|\cdot\|,\epsilon)\le\Nbr(\cF,\|\cdot\|,\epsilon)$.
+\end{lemma}
+\begin{remark}
+  The book writes $\cN(\epsilon)\le\Nbr(2\epsilon)$. With Mathlib's conventions this is the first form, with the external covering number, whose centres, such as the midpoint of a bracket, need not belong to $\cF$. With centres in $\cF$, any member of an $\epsilon$-bracket is within $\epsilon$ of the other members, which gives the second form.
+\end{remark}
+
+\begin{theorem}[Parametric classes; \han{Theorem 4.13}{97}]
+  \label{thm:han-4-13}
+  \uses{def:han-4-14, def:han-4-1}
+  \fid{adapted}
+  Let $\cF=\{f_\theta:\theta\in\Theta\}$. (i) If $\|f_\theta-f_{\theta'}\|_{\cF}\le L\|\theta-\theta'\|_\Theta$, then $\cN(\cF,\|\cdot\|_{\cF},\epsilon)\le\cN(\Theta,\|\cdot\|_\Theta,\epsilon/L)$. (ii) If $|f_\theta(x)-f_{\theta'}(x)|\le F(x)\|\theta-\theta'\|_\Theta$ with $\|F\|_{\cF}<\infty$, then $\Nbr(\cF,\|\cdot\|_{\cF},2\epsilon\|F\|_{\cF})\le\cN(\Theta,\|\cdot\|_\Theta,\epsilon)$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-4-1}
+  (i) Apply \cref{lem:han-4-1}(ii) on $\Theta$ to the pseudo-metric $(\theta,\theta')\mapsto\|f_\theta-f_{\theta'}\|_{\cF}$, which is at most $L\|\theta-\theta'\|_\Theta$; a cover of $\Theta$ for this pseudo-metric maps onto a cover of $\cF$ with centres in $\cF$. (ii) For each centre $\theta_j$ of a cover of $\Theta$ at radius $\epsilon$, the bracket $[f_{\theta_j}-\epsilon F,f_{\theta_j}+\epsilon F]$ contains every $f_\theta$ with $\|\theta-\theta_j\|_\Theta\le\epsilon$, and its size is $2\epsilon\|F\|_{\cF}$.
+\end{proof}

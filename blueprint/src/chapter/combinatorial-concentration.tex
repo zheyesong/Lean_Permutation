@@ -1,0 +1,119 @@
+\chapter{Combinatorial concentration}
+\label{chap:combinatorial-concentration}
+
+\section{Chatterjee's method}
+
+\begin{lemma}[Young's entropy inequality; \han{Exercise 2.7}{22}]
+  \label{lem:young-entropy}
+  \fid{adapted}
+  If $U\ge0$, $\E U=1$, $V\ge0$, and the expectations below are finite, then $\E[U\log V]\le\log\E V+\E[U\log U]$, with $0\log0=0$.
+\end{lemma}
+
+\begin{definition}[Setting of Chatterjee's method; \han{\S3.6.1}{53}]
+  \label{def:chatterjee}
+  \uses{def:han-3-1}
+  \fid{as printed}
+  Let $(X,X')$ be an exchangeable pair in a space $\cX$, $f:\cX\to\R$ with $\E f(X)=0$, and $F:\cX\times\cX\to\R$ antisymmetric with $\E[F(X,X')\mid X]=f(X)$. Put $v(x)=\frac12\E\bigl[|(f(X)-f(X'))F(X,X')|\bigm|X=x\bigr]$, and assume the integrability condition (3.5) of the book.
+\end{definition}
+
+\begin{lemma}[Master lemma; \han{Lemma 3.8}{54}]
+  \label{lem:han-3-8}
+  \uses{def:chatterjee}
+  \fid{adapted}
+  Let $M_\lambda=\E e^{\lambda f(X)}$. Then $M_\lambda$ is differentiable and $|M'_\lambda|\le|\lambda|\,\E[e^{\lambda f(X)}v(X)]$ for every $\lambda\in\R$.
+\end{lemma}
+
+\begin{lemma}[Chatterjee's first lemma; \han{Lemma 3.9}{54}]
+  \label{lem:han-3-9}
+  \uses{def:chatterjee}
+  \fid{as printed}
+  If $v(X)\le M$ almost surely, then $\E e^{\lambda f(X)}\le e^{M\lambda^2/2}$ for all $\lambda\in\R$, and $\Pr(f(X)\ge t)\le e^{-t^2/(2M)}$ for $t\ge0$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-3-8}
+  Integrate the differential inequality of \cref{lem:han-3-8}.
+\end{proof}
+
+\begin{lemma}[Chatterjee's second lemma; \han{Lemma 3.10}{55}]
+  \label{lem:han-3-10}
+  \uses{def:chatterjee}
+  \fid{as printed}
+  If $v(X)\le Af(X)+B$ almost surely for finite positive constants $A,B$, then $\E e^{\lambda f(X)}\le\exp\bigl(B\lambda^2/(2(1-A\lambda))\bigr)$ for $0\le\lambda<1/A$, and $\Pr(f(X)\ge t)\le\exp\bigl(-t^2/(2B+2At)\bigr)$ for $t\ge0$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-3-8}
+  \Cref{lem:han-3-8} and optimisation in $\lambda$.
+\end{proof}
+
+\begin{lemma}[Chatterjee's third lemma; \han{Lemma 3.11}{55}]
+  \label{lem:han-3-11}
+  \uses{def:chatterjee}
+  \fid{as printed}
+  For $\psi>0$ let $r(\psi)=\psi^{-1}\log\E e^{\psi v(X)}$. Then $\log\E e^{\lambda f(X)}\le\lambda^2r(\psi)/\bigl(2(1-\lambda^2/\psi)\bigr)$ for $0\le\lambda<\sqrt\psi$, and $\Pr(f(X)\ge t)\le\exp\bigl(-t^2/(2r(\psi)+2t/\sqrt\psi)\bigr)$ for $t\ge0$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-3-8, lem:young-entropy}
+  \Cref{lem:han-3-8} with \cref{lem:young-entropy}; the book does not derive the tail bound.
+\end{proof}
+
+\section{Combinatorial moment and tail bounds}
+
+\begin{definition}[The exchangeable pair for combinatorial sums; \han{\S3.6.2}{57}]
+  \label{def:perm-chatterjee}
+  \uses{def:combinatorial-sum, lem:perm-exchangeable}
+  \fid{as printed}
+  With $\pi'=\pi\circ(I\,J)$ as in \cref{lem:perm-exchangeable}, let $f(\pi)=\sum_id_{i\pi(i)}$ and $F(\pi_1,\pi_2)=\frac N2\bigl(f(\pi_1)-f(\pi_2)\bigr)$.
+\end{definition}
+
+\begin{lemma}[\han{Lemma 3.13}{57}]
+  \label{lem:han-3-13}
+  \uses{def:perm-chatterjee, def:chatterjee}
+  \fid{as printed}
+  $F$ is antisymmetric, $\E[F(\pi,\pi')\mid\pi]=f(\pi)$, and
+  \[
+    v(\pi)=\frac1{4N}\sum_{i,j}\bigl(d_{i\pi(i)}+d_{j\pi(j)}-d_{i\pi(j)}-d_{j\pi(i)}\bigr)^2\le2\sum_id_{i\pi(i)}^2+2\sigma_A^2.
+  \]
+\end{lemma}
+
+\begin{theorem}[Combinatorial Hoeffding inequality for product arrays; \han{Theorem 3.6}{58}]
+  \label{thm:han-3-6}
+  \uses{def:combinatorial-sum}
+  \fid{as printed}
+  If $a_{ij}=a_ib_j$, then $\Pr(Y-\E Y\ge t)\le\exp\bigl(-t^2/(4\bar\sigma_A^2+4\sigma_A^2)\bigr)$ for $t\ge0$, where $\bar\sigma_A^2=\max_{s\in\SN}\sum_i(a_i-\bar a)^2(b_{s(i)}-\bar b)^2$ and $\sigma_A^2=(N-1)^{-1}\sum_i(a_i-\bar a)^2\sum_j(b_j-\bar b)^2$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-3-13, lem:han-3-9}
+  Bound $v(\pi)$ by \cref{lem:han-3-13} and apply \cref{lem:han-3-9}.
+\end{proof}
+
+\begin{theorem}[Combinatorial Bernstein inequality; \han{Theorem 3.7}{59}]
+  \label{thm:han-3-7}
+  \uses{def:combinatorial-sum}
+  \fid{as printed}
+  For every array $A$ and $t\ge0$, $\Pr(Y-\E Y\ge t)\le\exp\bigl(-t^2/(12\sigma_A^2+4\sqrt2\,B_At)\bigr)$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-3-13, lem:han-3-11, lem:han-3-10, prop:han-3-1}
+  \Cref{lem:han-3-11} with $\psi=(8B_A^2)^{-1}$, after bounding $r(\psi)$ by \cref{lem:han-3-10} applied to $W=2\sum_id_{i\pi(i)}^2-\frac{2(N-1)}N\sigma_A^2$.
+\end{proof}
+
+\section{Hoeffding's convex ordering}
+
+\begin{lemma}[Finite Jensen inequality; \han{Lemma 3.15}{63}]
+  \label{lem:han-3-15}
+  \mathlibok
+  \fid{Mathlib}
+  For a convex function $f$ on a convex set, points $x_i$ of the set and weights $w_i\ge0$ with $\sum_iw_i=1$, $f\bigl(\sum_iw_ix_i\bigr)\le\sum_iw_if(x_i)$.
+  In Mathlib: \mathlibname{ConvexOn.map\_sum\_le}.
+\end{lemma}
+
+\begin{theorem}[Hoeffding's convex ordering inequality; \han{Theorem 3.8}{62}]
+  \label{thm:han-3-8}
+  \uses{def:uniform-permutation}
+  \fid{as printed}
+  Let $\cZ$ be a real vector space, $z_1,\dots,z_N\in\cZ$, $f:\cZ\to\R$ convex and $n\in[N]$. If $Y_1,\dots,Y_n$ are drawn from $\{z_1,\dots,z_N\}$ uniformly without replacement and $X_1,\dots,X_n$ uniformly with replacement, then $\E f\bigl(\sum_{i\le n}Y_i\bigr)\le\E f\bigl(\sum_{i\le n}X_i\bigr)$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-3-15, lem:uniform-invariance}
+  The coupling of Ben-Hamou, Peres and Salez (2018), conditional Jensen reduced to \cref{lem:han-3-15}.
+\end{proof}

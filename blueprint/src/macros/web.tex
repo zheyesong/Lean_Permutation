@@ -1,0 +1,15 @@
+% Macros used only by the web version; each has a counterpart in macros/print.tex.
+% Theorem-like environments share one counter, numbered within chapters.
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+% Mathlib names in the text.
+\newcommand{\mathlibname}[1]{\texttt{#1}}

@@ -1,0 +1,349 @@
+\chapter{Probability tools and weak convergence}
+\label{chap:weak-convergence}
+
+\section{Tools from Mathlib}
+
+\begin{theorem}[Markov; \han{Theorem 2.7}{20}]
+  \label{thm:han-2-7}
+  \mathlibok
+  \fid{Mathlib}
+  If $X\ge0$ is integrable and $t>0$, then $t\,\Pr(X\ge t)\le\E X$.
+  In Mathlib: \mathlibname{MeasureTheory.mul\_meas\_ge\_le\_integral\_of\_nonneg}.
+\end{theorem}
+
+\begin{theorem}[Jensen; \han{Theorem 2.9}{21}]
+  \label{thm:han-2-9}
+  \mathlibok
+  \fid{Mathlib}
+  If $\varphi$ is convex and continuous on a closed convex set $C$, $X\in C$ almost surely, and $X$ and $\varphi(X)$ are integrable, then $\varphi(\E X)\le\E\varphi(X)$.
+  In Mathlib: \mathlibname{ConvexOn.map\_integral\_le}.
+\end{theorem}
+
+\begin{lemma}[Chebyshev]
+  \label{lem:chebyshev}
+  \mathlibok
+  \fid{Mathlib}
+  If $X$ is square integrable and $c>0$, then $\Pr(|X-\E X|\ge c)\le\Var X/c^2$.
+  In Mathlib: \mathlibname{ProbabilityTheory.meas\_ge\_le\_variance\_div\_sq}.
+\end{lemma}
+
+\begin{lemma}[First Borel--Cantelli lemma]
+  \label{lem:borel-cantelli}
+  \mathlibok
+  \fid{Mathlib}
+  If $\sum_n\Pr(A_n)<\infty$, then $\Pr(A_n\text{ infinitely often})=0$.
+  In Mathlib: \mathlibname{MeasureTheory.measure\_limsup\_atTop\_eq\_zero}.
+\end{lemma}
+
+\begin{theorem}[Strong law of large numbers]
+  \label{thm:strong-law}
+  \mathlibok
+  \fid{Mathlib}
+  If $X_1,X_2,\dots$ are pairwise independent, identically distributed and integrable, then $n^{-1}\sum_{i\le n}X_i\to\E X_1$ almost surely.
+  In Mathlib: \mathlibname{ProbabilityTheory.strong\_law\_ae}.
+\end{theorem}
+
+\section{Convergence in probability and in distribution}
+
+\begin{definition}[Convergence in probability; \han{Definition 2.1}{13}]
+  \label{def:han-2-1}
+  \mathlibok
+  \fid{adapted}
+  Random elements $X_n,X$ of a metric space, on one probability space, converge in probability if $\Pr(d(X_n,X)>\epsilon)\to0$ for every $\epsilon>0$, and almost surely if $\Pr\bigl(d(X_n,X)\to0\bigr)=1$.
+  In Mathlib: \mathlibname{MeasureTheory.TendstoInMeasure} for convergence in probability; almost sure convergence is stated with Mathlib's almost-everywhere filter.
+\end{definition}
+
+\begin{definition}[Convergence in distribution; \han{Definition 2.2}{13}]
+  \label{def:han-2-2}
+  \mathlibok
+  \fid{Mathlib}
+  Let $E$ be a topological space with its Borel $\sigma$-algebra. Random elements $X_n:\Omega_n\to E$, each on its own probability space and almost-everywhere measurable, converge in distribution to $X:\Omega\to E$ if their laws converge to the law of $X$ in the weak topology on probability measures, that is, $\E f(X_n)\to\E f(X)$ for every bounded continuous $f:E\to\R$. We write $X_n\Rightarrow X$.
+  In Mathlib: \mathlibname{MeasureTheory.TendstoInDistribution}.
+\end{definition}
+
+\begin{proposition}[Portmanteau; \han{Proposition 2.1}{14}]
+  \label{prop:han-2-1}
+  \mathlibok
+  \uses{def:han-2-2}
+  \fid{Mathlib}
+  For probability measures $\mu_n,\mu$ on a metric space with its Borel $\sigma$-algebra, $\mu_n\to\mu$ weakly if and only if $\int f\,d\mu_n\to\int f\,d\mu$ for all bounded Lipschitz $f$. If $\mu_n\to\mu$ weakly, then $\limsup_n\mu_n(F)\le\mu(F)$ for closed $F$, $\liminf_n\mu_n(G)\ge\mu(G)$ for open $G$, and $\mu_n(A)\to\mu(A)$ when $\mu(\partial A)=0$.
+  In Mathlib: \mathlibname{MeasureTheory.ProbabilityMeasure.tendsto\_iff\_forall\_integral\_tendsto}, \mathlibname{MeasureTheory.tendsto\_iff\_forall\_lipschitz\_integral\_tendsto}, \mathlibname{MeasureTheory.ProbabilityMeasure.limsup\_measure\_closed\_le\_of\_tendsto}, \mathlibname{MeasureTheory.ProbabilityMeasure.le\_liminf\_measure\_open\_of\_tendsto} and \mathlibname{MeasureTheory.ProbabilityMeasure.tendsto\_measure\_of\_null\_frontier\_of\_tendsto}.
+\end{proposition}
+
+\begin{theorem}[Prokhorov; \han{Theorem 2.1}{15}]
+  \label{thm:han-2-1}
+  \mathlibok
+  \fid{Mathlib}
+  On a complete separable metric space, a set of probability measures has compact closure in the weak topology if and only if it is tight. (The book states one direction.)
+  In Mathlib: \mathlibname{MeasureTheory.isTightMeasureSet\_of\_isCompact\_closure} and \mathlibname{isCompact\_closure\_of\_isTightMeasureSet}.
+\end{theorem}
+
+\begin{theorem}[L\'evy continuity; \han{Theorem 2.3}{17}]
+  \label{thm:han-2-3}
+  \mathlibok
+  \fid{Mathlib}
+  Probability measures $\mu_n$ and $\mu$ on a finite-dimensional real inner product space satisfy $\mu_n\to\mu$ weakly if and only if the characteristic function of $\mu_n$ converges pointwise to that of $\mu$. Equivalently, random vectors satisfy $X_n\Rightarrow X$ if and only if $\varphi_{X_n}(t)\to\varphi_X(t)$ for every $t$.
+  In Mathlib: \mathlibname{MeasureTheory.ProbabilityMeasure.tendsto\_iff\_tendsto\_charFun} and \mathlibname{MeasureTheory.tendstoInDistribution\_iff\_tendsto\_charFun}.
+\end{theorem}
+
+\begin{lemma}[Cram\'er--Wold on one probability space]
+  \label{lem:cramer-wold-same-space}
+  \mathlibok
+  \uses{def:han-2-2}
+  \fid{Mathlib}
+  Let $X_n,X$ be random vectors in a finite-dimensional real inner product space, all defined on one probability space. Then $X_n\Rightarrow X$ if and only if $\langle X_n,t\rangle\Rightarrow\langle X,t\rangle$ for every $t$.
+  In Mathlib: \mathlibname{tendstoInDistribution\_iff\_tendstoInDistribution\_inner}.
+\end{lemma}
+
+\begin{corollary}[Cram\'er--Wold for laws; \han{Corollary 2.1}{17}]
+  \label{cor:han-2-1}
+  \uses{def:han-2-2}
+  \fid{adapted}
+  Let $X_n:\Omega_n\to\R^m$ be random vectors on probability spaces that may depend on $n$, and $X$ a random vector. Then $X_n\Rightarrow X$ if and only if $t^\top X_n\Rightarrow t^\top X$ for every $t\in\R^m$.
+\end{corollary}
+\begin{proof}
+  \uses{thm:han-2-3, lem:cramer-wold-same-space}
+  Through characteristic functions (\cref{thm:han-2-3}), as in the proof of \cref{lem:cramer-wold-same-space}.
+\end{proof}
+
+\begin{lemma}[Slutsky; \han{Exercise 2.4}{16}]
+  \label{lem:slutsky}
+  \mathlibok
+  \uses{def:han-2-2}
+  \fid{Mathlib}
+  Let $X_n$ and $Y_n$ all be defined on one probability space. If $X_n\Rightarrow X$ and $Y_n\to c$ in probability, then $X_n+Y_n\Rightarrow X+c$ and $(X_n,Y_n)\Rightarrow(X,c)$.
+  In Mathlib: \mathlibname{MeasureTheory.TendstoInDistribution.add\_of\_tendstoInMeasure\_const} and \mathlibname{MeasureTheory.TendstoInDistribution.prodMk\_of\_tendstoInMeasure\_const}.
+\end{lemma}
+
+\begin{lemma}[Slutsky for laws]
+  \label{lem:slutsky-laws}
+  \uses{def:han-2-2}
+  \fid{new}
+  For each $n$ let $A_n$ and $B_n$ be real random variables on a probability space $(\Omega_n,\Pr_n)$ that may depend on $n$, and let $a_n\to a$ be real numbers. If $A_n\Rightarrow A$ and $\Pr_n(|B_n|>\epsilon)\to0$ for every $\epsilon>0$, then $a_nA_n+B_n\Rightarrow aA$.
+\end{lemma}
+\begin{proof}
+  \uses{prop:han-2-1}
+  For bounded Lipschitz $g$, $\E g(a_nA_n+B_n)-\E g(aA_n)\to0$: split on $\{|B_n|>\epsilon\}$ and $\{|A_n|>K\}$, using that the laws of $A_n$ are tight. Then $\E g(aA_n)\to\E g(aA)$, and the Lipschitz form of \cref{prop:han-2-1} concludes.
+\end{proof}
+
+\begin{theorem}[Continuous mapping; \han{Theorem 2.6}{20}]
+  \label{thm:han-2-6}
+  \mathlibok
+  \uses{def:han-2-2}
+  \fid{adapted}
+  If $X_n\Rightarrow X$ and $g$ is continuous, then $g(X_n)\Rightarrow g(X)$.
+  In Mathlib: \mathlibname{MeasureTheory.TendstoInDistribution.continuous\_comp}.
+\end{theorem}
+
+\begin{theorem}[Central limit theorem, i.i.d.]
+  \label{thm:clt-iid}
+  \mathlibok
+  \fid{Mathlib}
+  If $X_1,X_2,\dots$ are i.i.d.\ real with finite variance $\sigma^2$, then $n^{-1/2}\sum_{i\le n}(X_i-\E X_1)\Rightarrow N(0,\sigma^2)$.
+  In Mathlib: \mathlibname{ProbabilityTheory.tendstoInDistribution\_inv\_sqrt\_mul\_sum\_sub}.
+\end{theorem}
+
+\begin{corollary}[Multivariate central limit theorem, i.i.d.]
+  \label{cor:clt-iid-multivariate}
+  \uses{def:han-2-2}
+  \fid{new}
+  If $X_1,X_2,\dots$ are i.i.d.\ in $\R^m$ with finite second moments and covariance $\Sigma$, then $n^{-1/2}\sum_{i\le n}(X_i-\E X_1)\Rightarrow N(0,\Sigma)$.
+\end{corollary}
+\begin{proof}
+  \uses{thm:clt-iid, lem:cramer-wold-same-space}
+  Apply \cref{thm:clt-iid} to every $t^\top X_i$ and then \cref{lem:cramer-wold-same-space}.
+\end{proof}
+
+\section{Stochastic processes}
+
+\begin{definition}[Separable process; \han{Definition 2.5}{18}]
+  \label{def:han-2-5}
+  \fid{as printed}
+  A real process $\{X(t)\}_{t\in T}$ on a pseudo-metric space $(T,d)$ is separable if there are a countable $S\subseteq T$ and a null set outside of which, for every $t\in T$, $X(t)$ is a limit of $X(s_k)$ along some $s_k\in S$ with $s_k\to t$.
+\end{definition}
+\begin{remark}
+  As the book notes after the definition, $\sup_{t\in T}|X(t)|=\sup_{s\in S}|X(s)|$ almost surely for a separable process.
+  The measurability of $\sup_{t\in T}|X(t)|$ needs a complete probability space. The chaining bounds of \cref{chap:entropy} do not use this definition: they are stated for countable index sets, and \cref{lem:chaining-transfer} extends them to separable index sets with continuous paths (\cref{chap:conventions}).
+\end{remark}
+
+\begin{definition}[Version; \han{Definition 2.6}{18}]
+  \label{def:han-2-6}
+  \fid{as printed}
+  Two processes indexed by $T$ are versions of each other if they have the same finite-dimensional distributions.
+\end{definition}
+
+\section{Weak convergence in the space of bounded functions}
+
+\begin{definition}[The space $\linf(T)$]
+  \label{def:linf}
+  \fid{new}
+  For a set $T$, $\linf(T)$ is the Banach space of bounded functions $x:T\to\R$ with $\|x\|_T=\sup_{t\in T}|x(t)|$, equipped with its Borel $\sigma$-algebra.
+\end{definition}
+
+\begin{definition}[$\UC(T,\rho)$]
+  \label{def:uc}
+  \uses{def:linf}
+  \fid{new}
+  For a pseudo-metric $\rho$ on $T$, $\UC(T,\rho)\subseteq\linf(T)$ is the set of bounded functions that are uniformly continuous for $\rho$.
+\end{definition}
+
+\begin{lemma}[Structure of $\UC(T,\rho)$]
+  \label{lem:uc-structure}
+  \uses{def:uc}
+  \fid{new}
+  $\UC(T,\rho)$ is a closed linear subspace of $\linf(T)$. If $(T,\rho)$ is totally bounded, its completion $K$ is compact, restriction to $T$ is an isometric isomorphism from $C(K,\R)$ onto $\UC(T,\rho)$, and $\UC(T,\rho)$ is separable.
+\end{lemma}
+
+\begin{lemma}[$\linf(T)$ is not separable]
+  \label{lem:linf-nonseparable}
+  \uses{def:linf}
+  \fid{new}
+  If $T$ is infinite, $\linf(T)$ is not separable.
+\end{lemma}
+\begin{remark}
+  The book says that $\linf(T)$ is not separable unless $T$ is countable. That is true, but weaker than this lemma: $\linf(T)$ is separable if and only if $T$ is finite.
+\end{remark}
+
+\begin{definition}[Finite-dimensional convergence]
+  \label{def:fidi}
+  \uses{def:han-2-2}
+  \fid{new}
+  Processes $X_n=\{X_n(t)\}_{t\in T}$ on probability spaces $\Omega_n$ converge in finite-dimensional distributions to a family $(\mu_I)$ of probability measures, indexed by the finite sets $I\subseteq T$, if $(X_n(t))_{t\in I}\Rightarrow\mu_I$ for every finite $I$.
+\end{definition}
+
+\begin{definition}[Asymptotic equicontinuity; \han{Theorem 2.5, condition (2.1)}{19}]
+  \label{def:aec}
+  \fid{adapted}
+  Processes $X_n$ on $(\Omega_n,\Pr_n)$ are asymptotically uniformly $\rho$-equicontinuous in probability if for all $\epsilon,\eta>0$ there is $\delta>0$ with
+  \[
+    \limsup_n\Pr_n\bigl\{\omega:\exists s,t\in T,\ \rho(s,t)<\delta,\ |X_n(\omega,s)-X_n(\omega,t)|>\epsilon\bigr\}<\eta.
+  \]
+  The measure is applied to a set that need not be measurable; this is the outer probability of the book.
+\end{definition}
+
+\begin{definition}[Weak convergence in $\linf(T)$, measurable case]
+  \label{def:linf-weak-conv}
+  \uses{def:linf, def:uc, def:han-2-2}
+  \fid{new}
+  Let $\rho$ be a pseudo-metric on $T$ for which $T$ is totally bounded. Borel measurable maps $X_n:\Omega_n\to\linf(T)$ converge weakly to a Borel probability measure $L$ on $\linf(T)$ with $L(\UC(T,\rho))=1$ if the laws of $X_n$ converge to $L$ in the sense of \cref{def:han-2-2}.
+\end{definition}
+
+\begin{definition}[Weak convergence in $\linf(T)$, book version; \han{Definition 2.8}{19}]
+  \label{def:han-2-8}
+  \uses{def:linf}
+  \notready
+  \fid{as printed}
+  As printed: finite-dimensional convergence and $\E^*H(X_n)\to\E H(\tilde X)$ for all bounded continuous $H$, with $\tilde X$ a separable version of a tight Borel limit $X$.
+\end{definition}
+\begin{remark}
+  Not ready: outer expectations are not defined in the book. A later version of this blueprint replaces this definition by Hoffmann-J{\o}rgensen's (van der Vaart and Wellner, 1996, Definition 1.3.3), with a lemma showing that it agrees with \cref{def:linf-weak-conv} for Borel measurable maps.
+\end{remark}
+
+\begin{lemma}[Finite-net approximation]
+  \label{lem:net-projection}
+  \uses{def:uc}
+  \fid{new}
+  Let $(T,\rho)$ be totally bounded, $S\subseteq T$ dense and $\delta>0$. There are a finite $\delta$-net $t_1,\dots,t_k\in S$ and a map $\pi_\delta:\linf(T)\to\linf(T)$ of the form $(\pi_\delta x)(t)=x(t_{j(t)})$ with $\rho(t,t_{j(t)})\le\delta$. It is linear, $1$-Lipschitz, depends only on $x(t_1),\dots,x(t_k)$, and satisfies $\|\pi_\delta x-x\|_T\le\sup_{\rho(s,t)\le\delta}|x(s)-x(t)|$.
+\end{lemma}
+
+\begin{lemma}[Approximation lemma]
+  \label{lem:approx}
+  \uses{def:han-2-2}
+  \fid{new}
+  In a metric space, let $X_n$ and $Y_{n,k}$ be random elements on $\Omega_n$. If $Y_{n,k}\Rightarrow Y_k$ as $n\to\infty$ for each $k$, $Y_k\Rightarrow Y$ as $k\to\infty$, and $\lim_k\limsup_n\Pr_n\{d(X_n,Y_{n,k})>\epsilon\}=0$ for every $\epsilon>0$, then $X_n\Rightarrow Y$.
+\end{lemma}
+\begin{proof}
+  \uses{prop:han-2-1}
+  Closed-set form of \cref{prop:han-2-1}.
+\end{proof}
+
+\begin{lemma}[Tightness on a countable dense set]
+  \label{lem:limit-tight}
+  \uses{def:fidi}
+  \fid{new}
+  If $X_n$ converge in finite-dimensional distributions and $S\subseteq T$ is countable, then the laws of $(X_n(s))_{s\in S}$ on $\R^S$ are tight.
+\end{lemma}
+\begin{proof}
+  \uses{thm:han-2-1}
+  Each coordinate converges, hence is tight (\cref{thm:han-2-1}); take products of compact sets with summable masses.
+\end{proof}
+
+\begin{lemma}[Identification of the limit on $\R^S$]
+  \label{lem:limit-fidi}
+  \uses{def:fidi}
+  \fid{new}
+  In the setting of \cref{lem:limit-tight}, the laws of $(X_n(s))_{s\in S}$ converge to a probability measure $\nu$ on $\R^S$ whose finite-dimensional laws are the given limits $\mu_I$, $I\subseteq S$ finite.
+\end{lemma}
+\begin{proof}
+  \uses{lem:limit-tight, thm:han-2-1}
+  By \cref{thm:han-2-1} the laws have cluster points; projections are continuous, so every cluster point has the finite-dimensional laws $\mu_I$, which determine it.
+\end{proof}
+
+\begin{lemma}[Uniformly continuous paths]
+  \label{lem:limit-paths}
+  \uses{lem:limit-fidi, def:aec}
+  \fid{new}
+  If moreover the $X_n$ are asymptotically uniformly $\rho$-equicontinuous and $S$ is dense in $(T,\rho)$, then $\nu$-almost every $y\in\R^S$ is uniformly continuous on $(S,\rho)$.
+\end{lemma}
+\begin{proof}
+  \uses{prop:han-2-1}
+  For $\delta,\epsilon>0$ the set $\{y:\exists s,t\in S,\ \rho(s,t)<\delta,\ |y(s)-y(t)|>\epsilon\}$ is open; apply the open-set form of \cref{prop:han-2-1} and let $\delta\to0$.
+\end{proof}
+
+\begin{theorem}[Existence of the limit]
+  \label{thm:limit-exists}
+  \uses{def:fidi, def:aec, def:uc}
+  \fid{new}
+  Let $(T,\rho)$ be totally bounded and let $X_n$ converge in finite-dimensional distributions to $(\mu_I)$ and be asymptotically uniformly $\rho$-equicontinuous in probability. Then there is a Borel probability measure $L$ on $\linf(T)$ with $L(\UC(T,\rho))=1$ whose finite-dimensional laws are the $\mu_I$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:limit-fidi, lem:limit-paths, lem:uc-structure}
+  Take a countable dense $S\subseteq T$ and the limit $\nu$ on $\R^S$ of \cref{lem:limit-fidi}. Extend $\nu$-almost every path from $S$ to the completion of $T$ (\cref{lem:limit-paths}); the extension map is measurable, and its image law $L$ lives on $\UC(T,\rho)$ (\cref{lem:uc-structure}). The finite-dimensional laws of $L$ at points of $S$ are the $\mu_I$. For a finite $I\subseteq T$, choose points of $S$ converging to those of $I$: by the joint finite-dimensional limits on $I$ together with these points and by asymptotic equicontinuity, the limit laws at the chosen points approach $\mu_I$, while by continuity of the paths of $L$ they approach the law of $L$ at $I$. So the finite-dimensional laws of $L$ are the $\mu_I$ at every point of $T$. This replaces Kolmogorov's extension theorem and does not use \cref{thm:han-2-5-suff}.
+\end{proof}
+
+\begin{lemma}[Uniqueness of the limit]
+  \label{lem:limit-unique}
+  \uses{def:uc}
+  \fid{new}
+  Two Borel probability measures on $\linf(T)$ that give $\UC(T,\rho)$ measure one, for $(T,\rho)$ totally bounded, and have the same finite-dimensional laws are equal.
+\end{lemma}
+\begin{proof}
+  \uses{lem:uc-structure}
+  Transfer to $C(K,\R)$ by \cref{lem:uc-structure}; there the Borel $\sigma$-algebra is generated by the evaluations (Mathlib: \mathlibname{ContinuousMap.borel\_eq\_iSup\_comap\_eval}).
+\end{proof}
+
+\begin{theorem}[Sufficient condition for weak convergence; \han{Theorem 2.5}{19}]
+  \label{thm:han-2-5-suff}
+  \uses{def:linf-weak-conv, def:fidi, def:aec}
+  \fid{adapted}
+  Let $(T,\rho)$ be totally bounded and let $X_n:\Omega_n\to\linf(T)$ be Borel measurable, converge in finite-dimensional distributions, and be asymptotically uniformly $\rho$-equicontinuous in probability. Then $X_n$ converges weakly in $\linf(T)$ (\cref{def:linf-weak-conv}) to the measure $L$ of \cref{thm:limit-exists}, and the finite-dimensional laws of $L$ are the limits of those of $X_n$ at all points of $T$.
+\end{theorem}
+\begin{proof}
+  \uses{lem:net-projection, lem:approx, thm:limit-exists, lem:limit-unique}
+  Approximate $X_n$ by $\pi_\delta X_n$ (\cref{lem:net-projection}), which converges by finite-dimensional convergence, and apply \cref{lem:approx}; identify the limit with \cref{thm:limit-exists,lem:limit-unique}.
+\end{proof}
+
+\begin{proposition}[Tight laws on $\linf(T)$; \han{Proposition 2.3}{19}]
+  \label{prop:han-2-3}
+  \uses{def:linf, def:uc}
+  \fid{as printed}
+  A sample-bounded process has the finite-dimensional laws of a tight Borel probability measure on $\linf(T)$ if and only if there is a pseudo-metric $\rho$ for which $T$ is totally bounded and the process has a version with almost all paths uniformly $\rho$-continuous.
+\end{proposition}
+\begin{remark}
+  Cited in the book (Gin\'e and Nickl, 2016, Proposition 2.1.7; Kosorok, 2008, Lemma 7.2). Needed only for \cref{thm:han-2-5-nec}.
+\end{remark}
+
+\begin{theorem}[Necessary condition; \han{Theorem 2.5}{19}]
+  \label{thm:han-2-5-nec}
+  \uses{def:linf-weak-conv, def:fidi, def:aec}
+  \notready
+  \fid{as printed}
+  If $X_n$ converges weakly in $\linf(T)$ to a tight Borel limit, then the $X_n$ converge in finite-dimensional distributions and are asymptotically uniformly $\rho$-equicontinuous in probability for some pseudo-metric $\rho$ making $T$ totally bounded.
+\end{theorem}
+\begin{proof}
+  \uses{prop:han-2-3}
+  Deferred.
+\end{proof}
+\begin{remark}
+  Deferred. In Chapters 4--5 only \cref{thm:han-4-6-onlyif}, the ``only if'' half of the book's Theorem 4.6, needs it; everything else uses \cref{thm:han-2-5-suff}.
+\end{remark}

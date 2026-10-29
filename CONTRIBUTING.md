@@ -57,6 +57,16 @@ Small fixes, documentation and narrowly scoped lemmas need no design discussion.
 - Do not copy the book. Write statements, docstrings and comments in your own words, and cite the book by item and page. Never commit the book's PDF.
 - Describe differences from the book neutrally: say how and why the code differs, for example which hypothesis was added and where the proof needs it.
 
+## Blueprint
+
+The plan of the formalization is the blueprint in `blueprint/src`, written with [leanblueprint](https://github.com/PatrickMassot/leanblueprint). Its first chapter fixes conventions for the whole project: covering numbers, sub-Gaussian variables, weak convergence and finite populations, among others.
+
+- Follow the blueprint rather than the book. Some printed statements need a change before they can be formalized; the blueprint records the version to formalize, the item and page of the book, and a tag: `as printed`, `adapted`, `new` or `Mathlib`. `as printed` refers to the mathematics: the statement is the book's, up to notation, but the words are our own.
+- Do not weaken or change a hypothesis to make a proof go through. If a statement seems to need a change, say so in the issue of your task, or in a new issue, before changing it. Nodes marked "not ready" (orange in the dependency graph) are not formalized until their statement is settled.
+- When you formalize a node, add `\lean{...}` with your declaration names to it, and `\leanok`: inside the statement environment once the statement is formalized, and inside the proof environment once the proof is complete. Make `\uses{...}` match what the statement and the proof actually use. Adding `\lean{...}` or `\leanok` to a node does not change its statement.
+- Some nodes name Mathlib declarations in their text ("In Mathlib: ..."). When a file of yours uses one of them, add it to the node's `\lean{...}` in the same pull request.
+- Every name in `\lean{...}` must exist in the library, as `LeanPermutation.lean` imports it; a Mathlib name counts once a file of the library imports its module. CI builds the blueprint and checks the names on every pull request. To build it yourself, see "Build the blueprint" in the [README](README.md).
+
 ## AI assistance
 
 AI tools are welcome. If you used one, say so in the pull-request description. One line is enough, such as `Made with <tool>` or a `Co-Authored-By:` line. You must understand, and be able to explain, every line you submit: "the AI wrote it" does not answer a review question. As a rough guide, keep at most three AI-assisted pull requests open at a time.

@@ -1,0 +1,63 @@
+name: Blueprint
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md"]
+  pull_request:
+    branches: [main]
+    paths-ignore: ["**.md"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded runs on pull requests only; every run on main completes.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  blueprint:
+    name: Build and check the blueprint
+    runs-on: ubuntu-24.04
+    # The Pages deployment needs these; it runs only on pushes to main.
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Free disk space for the Mathlib cache and the TeX image
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # checkdecls looks up the blueprint's \lean names in the built library.
+      - name: Build the library
+        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6 # v1.6.2
+        with:
+          build: true
+          lint: false
+          mk_all-check: false
+          axiom-audit: false
+
+      # Builds the blueprint (web and PDF) and runs checkdecls on every event.
+      # On pushes to main it also builds the API documentation and deploys
+      # home_page/ to GitHub Pages. The home page is static, so Jekyll is off.
+      - name: Blueprint, API documentation and Pages
+        uses: leanprover-community/docgen-action@dacc1acc2a3f532cc577266979ba9c36c7593f7c # main, 2026-10-05
+        with:
+          blueprint: true
+          build-page: false
+          homepage: home_page

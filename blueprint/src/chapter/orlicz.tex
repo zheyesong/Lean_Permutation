@@ -1,0 +1,224 @@
+\chapter{Orlicz norms and sub-Gaussian bounds}
+\label{chap:orlicz}
+
+\section{Sub-Gaussian moment generating functions}
+
+\begin{definition}[Sub-Gaussian moment generating function]
+  \label{def:subgaussian-mgf}
+  \mathlibok
+  \fid{Mathlib}
+  A real random variable $X$ has a sub-Gaussian moment generating function with variance proxy $c\ge0$ if $e^{tX}$ is integrable and $\E e^{tX}\le e^{ct^2/2}$ for every $t\in\R$. On a probability space this forces $\E X=0$ (\cref{lem:subgaussian-mgf-mean}).
+  In Mathlib: \mathlibname{ProbabilityTheory.HasSubgaussianMGF}.
+\end{definition}
+
+\begin{lemma}[Sub-Gaussian tail]
+  \label{lem:subgaussian-mgf-tail}
+  \mathlibok
+  \uses{def:subgaussian-mgf}
+  \fid{Mathlib}
+  If $X$ has a sub-Gaussian moment generating function with variance proxy $c>0$, then $\Pr(X\ge\epsilon)\le\exp(-\epsilon^2/(2c))$ for every $\epsilon\ge0$.
+  In Mathlib: \mathlibname{ProbabilityTheory.HasSubgaussianMGF.measure\_ge\_le}. Mathlib's statement also allows $c=0$; there Lean reads $\epsilon^2/0$ as $0$, and the bound is $1$.
+\end{lemma}
+
+\begin{lemma}[Mean zero]
+  \label{lem:subgaussian-mgf-mean}
+  \uses{def:subgaussian-mgf}
+  \fid{new}
+  On a probability space, a random variable with a sub-Gaussian moment generating function has mean $0$.
+\end{lemma}
+\begin{proof}
+  $X$ is integrable, because $e^{X}$ and $e^{-X}$ are. For $t>0$, $e^{tx}\ge1+tx$ gives $t\,\E X\le\E e^{tX}-1\le e^{ct^2/2}-1$, so $\E X\le0$ as $t\downarrow0$; the same argument for $-X$, which has a sub-Gaussian moment generating function with the same variance proxy, gives $\E X\ge0$.
+\end{proof}
+\begin{remark}
+  The probability assumption is needed: Mathlib's notion is defined for every measure, and for the measure $\frac12\delta_1$ on $\R$ the identity satisfies it with $c=1$ but has mean $\frac12$.
+\end{remark}
+
+\begin{lemma}[Two-sided tails]
+  \label{lem:subgaussian-mgf-two-sided}
+  \uses{def:subgaussian-mgf}
+  \fid{new}
+  If $X$ has a sub-Gaussian moment generating function with variance proxy $c>0$, then for every $t\ge0$, $\Pr(X\le-t)\le\exp(-t^2/(2c))$ and $\Pr(|X|\ge t)\le2\exp(-t^2/(2c))$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:subgaussian-mgf-tail}
+  $-X$ has a sub-Gaussian moment generating function with the same variance proxy; apply \cref{lem:subgaussian-mgf-tail} to $X$ and to $-X$.
+\end{proof}
+
+\begin{definition}[Rademacher variable]
+  \label{def:rademacher}
+  \fid{new}
+  A Rademacher variable is a random variable $\epsilon$ with law $\frac12(\delta_1+\delta_{-1})$, that is, $\Pr(\epsilon=1)=\Pr(\epsilon=-1)=\frac12$.
+\end{definition}
+
+\begin{lemma}[Rademacher sums]
+  \label{lem:rademacher-mgf}
+  \uses{def:subgaussian-mgf, def:rademacher}
+  \fid{new}
+  If $\epsilon_1,\dots,\epsilon_n$ are independent Rademacher variables and $a\in\R^n$, then $\sum_ia_i\epsilon_i$ has a sub-Gaussian moment generating function with variance proxy $\sum_ia_i^2$.
+\end{lemma}
+\begin{proof}
+  $\E e^{ta_i\epsilon_i}=\cosh(ta_i)\le e^{t^2a_i^2/2}$, and independence multiplies the moment generating functions. For $n=0$ the sum is $0$.
+\end{proof}
+
+\begin{lemma}[Maximum of sub-Gaussian variables]
+  \label{lem:subgaussian-max}
+  \uses{def:subgaussian-mgf}
+  \fid{new}
+  Let $m\ge1$ and let $X_1,\dots,X_m$ be random variables on a probability space, with arbitrary dependence, each with a sub-Gaussian moment generating function with variance proxy $c$. Then $\E\max_{i\le m}|X_i|\le\sqrt{2c\log(2m)}$.
+\end{lemma}
+\begin{proof}
+  \uses{thm:han-2-9}
+  If $c=0$, every $X_i$ is $0$ almost surely. Otherwise, for $t>0$, Jensen's inequality (\cref{thm:han-2-9}) and $e^{t|x|}\le e^{tx}+e^{-tx}$ give $\E\max_i|X_i|\le t^{-1}\log\E e^{t\max_i|X_i|}\le t^{-1}\log\bigl(2me^{ct^2/2}\bigr)$; take $t=\sqrt{2\log(2m)/c}$.
+\end{proof}
+
+\begin{theorem}[Hoeffding; \han{Theorem 2.18}{36}]
+  \label{thm:han-2-18}
+  \fid{as printed}
+  If $X_1,\dots,X_n$ are independent with $X_i\in[a_i,b_i]$ almost surely, then $\log\E e^{\lambda\sum_i(X_i-\E X_i)}\le\frac{\lambda^2}8\sum_i(b_i-a_i)^2$ for all $\lambda\in\R$, and
+  \[
+    \Pr\Bigl(\sum_i(X_i-\E X_i)\ge t\Bigr)\le\exp\Bigl(-\frac{2t^2}{\sum_i(b_i-a_i)^2}\Bigr),\qquad t\ge0.
+  \]
+\end{theorem}
+\begin{proof}
+  \uses{def:subgaussian-mgf, lem:subgaussian-mgf-tail}
+  By Hoeffding's lemma, which is in Mathlib, each $X_i-\E X_i$ has a sub-Gaussian moment generating function with variance proxy $(b_i-a_i)^2/4$. For independent summands the variance proxies add, which gives the first display, and \cref{lem:subgaussian-mgf-tail} gives the second when $\sum_i(b_i-a_i)^2>0$. If $\sum_i(b_i-a_i)^2=0$, every $X_i$ is almost surely constant, the centred sum is $0$ almost surely, and its tail probability is $0$ for every $t>0$.
+\end{proof}
+\begin{remark}
+  Mathlib has these facts as \mathlibname{ProbabilityTheory.hasSubgaussianMGF\_of\_mem\_Icc} (if $X\in[a,b]$ almost surely, then $X-\E X$ has a sub-Gaussian moment generating function with variance proxy $(b-a)^2/4$) and \mathlibname{ProbabilityTheory.HasSubgaussianMGF.measure\_sum\_ge\_le\_of\_iIndepFun}. The book's two displays follow after centring and converting the variance proxy, so in Lean they are separate statements. If $\sum_i(b_i-a_i)^2=0$, the centred sum is $0$ almost surely, so its tail probability is $0$ for every $t>0$, and the second display holds however its right-hand side is read. The book's proof goes through the $\psi_2$-norm; the proof here follows Mathlib, which gives the constants of the two displays directly.
+\end{remark}
+
+\section{Orlicz norms}
+
+\begin{definition}[Young function; \han{Definition 2.9}{22}]
+  \label{def:han-2-9}
+  \fid{as printed}
+  A Young function is a convex, strictly increasing function $\psi:[0,\infty)\to[0,\infty)$ with $\psi(0)=0$ and $\psi(x)\to\infty$ as $x\to\infty$.
+\end{definition}
+\begin{remark}
+  For $p\ge1$, $\psi_p(x)=e^{x^p}-1$ (the book's notation list) is a Young function.
+\end{remark}
+
+\begin{definition}[Orlicz norm; \han{Definition 2.10}{22}]
+  \label{def:han-2-10}
+  \uses{def:han-2-9}
+  \fid{as printed}
+  For a Young function $\psi$ and a real random variable $X$,
+  $\|X\|_\psi=\inf\{C>0:\E\psi(|X|/C)\le1\}$.
+\end{definition}
+\begin{remark}
+  Convention: $\inf\emptyset=\infty$.
+\end{remark}
+
+\begin{theorem}[\han{Theorem 2.10}{22}]
+  \label{thm:han-2-10}
+  \uses{def:han-2-10}
+  \fid{adapted}
+  For a Young function $\psi$, $\|\cdot\|_\psi$ is a seminorm on $L_\psi=\{X:\|X\|_\psi<\infty\}$, and $L_\psi$ modulo almost-sure equality is a Banach space.
+\end{theorem}
+\begin{remark}
+  Cited in the book (Krasnosel'skii and Rutickii, 1961, Ch.~II.9). Later nodes use only the triangle inequality.
+\end{remark}
+
+\begin{proposition}[\han{Proposition 2.4}{23}]
+  \label{prop:han-2-4}
+  \uses{def:han-2-10}
+  \fid{adapted}
+  Let $X$ be a real random variable and $1\le q\le p$.
+  \begin{enumerate}
+    \item[(i)] For $\psi(x)=x^p$, $\|X\|_\psi=\|X\|_{L^p}$.
+    \item[(ii)] $\|X\|_{L^q}\le\|X\|_{L^p}\le\|X\|_{\psi_p}$.
+    \item[(iii)] $\|X\|_{\psi_q}\le(\log2)^{1/p-1/q}\|X\|_{\psi_p}$.
+    \item[(iv)] $\|X\|_{L^p}\le\Gamma(p+1)\|X\|_{\psi_1}$.
+    \item[(v)] $\|X^2\|_{\psi_1}=\|X\|_{\psi_2}^2$.
+    \item[(vi)] If $0<\|X\|_\psi<\infty$, then $\Pr(|X|>t)\le(1+a)/(\psi(t/\|X\|_\psi)+a)$ for all $t>0$ and $a\ge0$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  Exercise 2.8 of the book.
+\end{proof}
+
+\begin{lemma}[Maximal inequality; \han{Lemma 2.1}{23}]
+  \label{lem:han-2-1}
+  \uses{def:han-2-10}
+  \fid{as printed}
+  For a Young function $\psi$ and random variables $X_1,\dots,X_m$ with arbitrary dependence,
+  $\E\max_{i\le m}|X_i|\le\psi^{-1}(m)\max_{i\le m}\|X_i\|_\psi$.
+\end{lemma}
+\begin{proof}
+  Jensen's inequality (\cref{thm:han-2-9}) applied to $\psi$.
+  \uses{thm:han-2-9}
+\end{proof}
+
+\begin{lemma}[$\psi_p$ maximal inequality; \han{Lemma 2.3}{25}]
+  \label{lem:han-2-3}
+  \uses{def:han-2-10}
+  \fid{adapted}
+  For $p\ge1$ and random variables $X_1,\dots,X_m$ with arbitrary dependence,
+  $\bigl\|\max_{i\le m}|X_i|\bigr\|_{\psi_p}\le\bigl(\log(2m)/\log2\bigr)^{1/p}\max_{i\le m}\|X_i\|_{\psi_p}$.
+\end{lemma}
+\begin{proof}
+  \uses{thm:han-2-9}
+  Let $a>\max_i\|X_i\|_{\psi_p}$ and $q=\log(2m)/\log2\ge1$. Then $\E\exp(\max_i|X_i|^p/a^p)\le\sum_i\E\exp(|X_i|^p/a^p)\le2m$, and Jensen's inequality (\cref{thm:han-2-9}) for the concave map $x\mapsto x^{1/q}$ gives $\E\exp\bigl(\max_i|X_i|^p/(qa^p)\bigr)\le(2m)^{1/q}=2$. Hence $\|\max_i|X_i|\|_{\psi_p}\le q^{1/p}a$; let $a$ decrease to $\max_i\|X_i\|_{\psi_p}$.
+\end{proof}
+\begin{remark}
+  The book writes the multiplier as $\psi_p^{-1}(m)=(\log(1+m))^{1/p}$. The multiplier used here, $(\log(2m)/\log2)^{1/p}$, equals $1$ for $m=1$, where the maximum is $|X_1|$ itself, and the proof uses Jensen's inequality. Since $\log(2m)\le2\log(1+m)$, it is at most $(2/\log2)^{1/p}\psi_p^{-1}(m)$, so later bounds change only by a constant factor.
+\end{remark}
+
+\section{Sub-Gaussian and sub-exponential variables}
+
+\begin{definition}[Sub-Gaussian, sub-exponential; \han{Definitions 2.11--2.12}{24}]
+  \label{def:han-2-11}
+  \uses{def:han-2-10}
+  \fid{as printed}
+  A real random variable $X$ is sub-Gaussian if $\|X\|_{\psi_2}<\infty$, and sub-exponential if $\|X\|_{\psi_1}<\infty$.
+\end{definition}
+
+\begin{lemma}[Sub-Gaussian tails; \han{Lemma 2.2(i)}{24}]
+  \label{lem:han-2-2-i}
+  \uses{def:han-2-11}
+  \fid{adapted}
+  For a real random variable $X$ the following are equivalent, with constants that depend only on each other: $\|X\|_{\psi_2}<\infty$; $\Pr(|X|\ge t)\le2e^{-t^2/K_1^2}$ for all $t\ge0$ and some $K_1>0$; and, when $\E X=0$, $\E e^{\lambda X}\le e^{\lambda^2K_2^2}$ for all $\lambda\in\R$ and some $K_2>0$. In particular, the tail bound with a constant $K_1>0$ implies $\|X\|_{\psi_2}\le\sqrt3\,K_1$.
+\end{lemma}
+
+\begin{lemma}[Sub-exponential tails; \han{Lemma 2.2(ii)}{24}]
+  \label{lem:han-2-2-ii}
+  \uses{def:han-2-11}
+  \fid{adapted}
+  For a real random variable $X$ the following are equivalent, with constants that depend only on each other: $\|X\|_{\psi_1}<\infty$; $\Pr(|X|\ge t)\le2e^{-t/K_1}$ for all $t\ge0$ and some $K_1>0$; and, when $\E X=0$, $\E e^{\lambda X}\le e^{\lambda^2K_2^2}$ for all $|\lambda|\le1/K_2$ and some $K_2>0$. In particular, the tail bound with a constant $K_1>0$ implies $\|X\|_{\psi_1}\le3K_1$.
+\end{lemma}
+\begin{proof}
+  Exercise 2.9 of the book.
+\end{proof}
+
+\begin{lemma}[Bridge: moment generating function to $\psi_2$-norm]
+  \label{lem:subgaussian-bridge}
+  \uses{def:subgaussian-mgf, def:han-2-11}
+  \fid{new}
+  If $X$ has a sub-Gaussian moment generating function with variance proxy $c$, then $\|X\|_{\psi_2}\le\sqrt{6c}$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:subgaussian-mgf-two-sided, lem:han-2-2-i}
+  If $c=0$, $X=0$ almost surely. Otherwise \cref{lem:subgaussian-mgf-two-sided} gives $\Pr(|X|\ge t)\le2e^{-t^2/(2c)}$, and \cref{lem:han-2-2-i} with $K_1^2=2c$ finishes.
+\end{proof}
+
+\begin{lemma}[Rademacher sums, $\psi_2$-norm]
+  \label{lem:rademacher-psi2}
+  \uses{def:han-2-11, def:rademacher}
+  \fid{new}
+  If $\epsilon_1,\dots,\epsilon_n$ are i.i.d.\ Rademacher variables and $a\in\R^n$, then $\bigl\|\sum_ia_i\epsilon_i\bigr\|_{\psi_2}\le\sqrt{6\sum_ia_i^2}$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:rademacher-mgf, lem:subgaussian-bridge}
+  By \cref{lem:rademacher-mgf}, $\sum_ia_i\epsilon_i$ has a sub-Gaussian moment generating function with variance proxy $\sum_ia_i^2$; apply \cref{lem:subgaussian-bridge}.
+\end{proof}
+
+\begin{lemma}[Bernstein tails; \han{Lemma 2.4}{26}]
+  \label{lem:han-2-4}
+  \uses{def:han-2-11}
+  \fid{as printed}
+  If $a,b>0$ and $\Pr(|X|>t)\le2\exp\bigl(-t^2/(b+at)\bigr)$ for all $t\ge0$, then $\|X\|_{\psi_1}\le6a+\sqrt{6b/\log2}$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-2-2-i, lem:han-2-2-ii, prop:han-2-4, thm:han-2-10}
+  Split $|X|$ at $b/a$, bound the two pieces with \cref{lem:han-2-2-i,lem:han-2-2-ii}, compare $\psi_1$ and $\psi_2$ with \cref{prop:han-2-4}(iii), and add with the triangle inequality (\cref{thm:han-2-10}).
+\end{proof}

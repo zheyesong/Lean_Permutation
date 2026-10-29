@@ -1,0 +1,208 @@
+\chapter{Covering numbers and chaining}
+\label{chap:entropy}
+
+\section{Covering and packing numbers}
+
+\begin{definition}[Covering and packing numbers; \han{Definition 4.1}{73}]
+  \label{def:han-4-1}
+  \mathlibok
+  \fid{Mathlib}
+  Let $A$ be a subset of a pseudo-metric space $(T,d)$ and $\epsilon\ge0$. A set $C$ is an $\epsilon$-cover of $A$ if every point of $A$ is at distance at most $\epsilon$ from a point of $C$. The external covering number $\cNext(A,d,\epsilon)$ is the least cardinality of an $\epsilon$-cover, the internal covering number $\cN(A,d,\epsilon)$ the least cardinality of an $\epsilon$-cover contained in $A$, and the packing number $\cD(A,d,\epsilon)$ the largest cardinality of a subset of $A$ whose points are pairwise at distance $>\epsilon$. All three take values in $\Nat\cup\{\infty\}$.
+  In Mathlib: \mathlibname{Metric.coveringNumber}, \mathlibname{Metric.externalCoveringNumber}, \mathlibname{Metric.packingNumber}, \mathlibname{Metric.IsCover} and \mathlibname{Metric.IsSeparated}.
+\end{definition}
+\begin{remark}
+  The book does not fix whether balls are open or closed, whether separation is strict, or whether centres lie in the set. Mathlib's choices are used throughout.
+\end{remark}
+
+\begin{lemma}[Covering versus packing; \han{Exercise 4.1}{73}]
+  \label{lem:covering-packing}
+  \mathlibok
+  \uses{def:han-4-1}
+  \fid{Mathlib}
+  $\cNext(A,d,\epsilon)\le\cN(A,d,\epsilon)\le\cD(A,d,\epsilon)$ and $\cD(A,d,2\epsilon)\le\cNext(A,d,\epsilon)$. In particular $\cN(A,d,\epsilon)\le\cD(A,d,\epsilon)\le\cN(A,d,\epsilon/2)$, which is the book's form.
+  In Mathlib: \mathlibname{Metric.externalCoveringNumber\_le\_coveringNumber}, \mathlibname{Metric.coveringNumber\_le\_packingNumber} and \mathlibname{Metric.packingNumber\_two\_mul\_le\_externalCoveringNumber}.
+\end{lemma}
+
+\begin{lemma}[Subsets]
+  \label{lem:covering-subset}
+  \mathlibok
+  \uses{def:han-4-1}
+  \fid{Mathlib}
+  If $A\subseteq B$, then $\cNext(A,d,\epsilon)\le\cNext(B,d,\epsilon)$ and $\cN(A,d,\epsilon)\le\cN(B,d,\epsilon/2)$. The internal covering number is not monotone under inclusion.
+  In Mathlib: \mathlibname{Metric.coveringNumber\_subset\_le} and \mathlibname{Metric.externalCoveringNumber\_mono\_set}.
+\end{lemma}
+
+\begin{lemma}[\han{Lemma 4.1}{73}]
+  \label{lem:han-4-1}
+  \uses{def:han-4-1}
+  \fid{adapted}
+  (i) $\cN$, $\cNext$ and $\cD$ are nonincreasing in $\epsilon$. (ii) If $d_1\le d_2$ on $T$, then $\cN(T,d_1,\epsilon)\le\cN(T,d_2,\epsilon)$, and the same holds for $\cNext$ and $\cD$.
+\end{lemma}
+\begin{proof}
+  Exercise 4.2 of the book.
+\end{proof}
+
+\begin{definition}[Metric entropy; \han{Definition 4.2}{73}]
+  \label{def:han-4-2}
+  \uses{def:han-4-1}
+  \fid{adapted}
+  The metric entropy of $(T,d)$ at scale $\epsilon$ is $\log\cN(T,d,\epsilon)$, with $\log\infty=\infty$.
+\end{definition}
+
+\begin{definition}[$L^p(Q)$ distance on a class of functions]
+  \label{def:lp-class-pseudometric}
+  \uses{def:han-4-1}
+  \fid{new}
+  Let $Q$ be a measure on a measurable space $\cX$, let $1\le p\le\infty$, and let $\cF$ be a class of real functions on $\cX$, each of which belongs to $L^p(Q)$. The $L^p(Q)$ distance on $\cF$ is the pseudo-metric $d(f,g)=\bigl\|[f]-[g]\bigr\|_{L^p(Q)}=\|f-g\|_{L^p(Q)}$ induced by the map $f\mapsto[f]$ that sends $f$ to its class in $L^p(Q)$. The elements of $\cF$ remain functions on $\cX$ and are evaluated pointwise. We write $(\cF,L^p(Q))$ for $\cF$ with this pseudo-metric, and $\cN(\cF,L^p(Q),\epsilon)$, $\cNext(\cF,L^p(Q),\epsilon)$ and $\cD(\cF,L^p(Q),\epsilon)$ for the numbers of \cref{def:han-4-1}.
+\end{definition}
+\begin{remark}
+  The map $f\mapsto[f]$ need not be injective: two functions that agree $Q$-almost everywhere are at distance $0$, so $d$ is a pseudo-metric. When one class carries two such distances, for example $L^2(\PN)$ and $L^2(\mathrm P)$, each is put on its own copy of the index set, tagged by $(p,Q)$ (\cref{chap:conventions}). The book uses these distances without fixing the conventions.
+\end{remark}
+
+\begin{lemma}[Volume bound; \han{Example 4.1}{73}]
+  \label{lem:han-ex-4-1-volume}
+  \uses{def:han-4-1}
+  \fid{adapted}
+  For $\Theta\subseteq\R^d$, a norm $\|\cdot\|$ with unit ball $B$, and $\epsilon>0$,
+  $\cN(\Theta,\|\cdot\|,\epsilon)\le\mathrm{Vol}(\Theta+\tfrac\epsilon2B)/\mathrm{Vol}(\tfrac\epsilon2B)$.
+\end{lemma}
+
+\begin{lemma}[Polynomial covering bound; \han{Example 4.1}{73}]
+  \label{lem:han-ex-4-1-poly}
+  \uses{def:han-4-1}
+  \fid{adapted}
+  For nonempty bounded $\Theta\subseteq\R^d$, the Euclidean norm and every $\epsilon>0$, $\cN(\Theta,\|\cdot\|,\epsilon)\le(1+2\diam\Theta/\epsilon)^d$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-ex-4-1-volume}
+  For any $x_0\in\Theta$, $\Theta+\frac\epsilon2B$ lies in the ball of radius $\diam\Theta+\frac\epsilon2$ about $x_0$, so \cref{lem:han-ex-4-1-volume} gives at most $\bigl((\diam\Theta+\epsilon/2)/(\epsilon/2)\bigr)^d$.
+\end{proof}
+\begin{remark}
+  The book writes the bound as $K(\diam\Theta/\epsilon)^d$, with $K$ depending only on $\Theta$ and $d$. The form used here holds for every $\epsilon>0$, including large $\epsilon$ and a set with one point, so no range of $\epsilon$ has to be fixed.
+\end{remark}
+
+\section{Dudley's chaining bounds}
+
+\begin{lemma}[One-sided chaining]
+  \label{lem:chaining-one-sided}
+  \uses{def:han-2-9, def:han-2-10, def:han-4-1}
+  \fid{new}
+  Let $\psi$ be a Young function and $\{X(t)\}_{t\in T}$ a process indexed by a countable pseudo-metric space $(T,d)$ with $\|X(t)\|_\psi<\infty$ and $\|X(s)-X(t)\|_\psi\le d(s,t)$ for all $s,t$.
+  \begin{enumerate}
+    \item[(i)] For every $t_0\in T$,
+    $\E\sup_{t\in T}|X(t)-X(t_0)|\le4\int_0^{\diam T}\psi^{-1}\bigl(\cN(T,d,\epsilon)\bigr)\,d\epsilon$.
+    \item[(ii)] For every finite $S\subseteq T$ and every $\eta>0$ there is a map $\pi:S\to T$ whose image has at most $\cN(T,d,\eta)$ points, such that
+    $\E\max_{t\in S}|X(t)-X(\pi(t))|\le4\int_0^\eta\psi^{-1}\bigl(\cN(T,d,\epsilon)\bigr)\,d\epsilon$.
+  \end{enumerate}
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-2-1}
+  If the integral is infinite there is nothing to prove, so let all covering numbers be finite. For each $j$ let $T_j\subseteq T$ be a $2^{-j}$-cover of $T$ with $\cN(T,d,2^{-j})$ points, and give each point of $T_j$ a parent in $T_{j-1}$ at distance at most $2^{-j+1}$. By \cref{lem:han-2-1}, the largest increment between a point of $T_j$ and its parent has expectation at most $2^{-j+1}\psi^{-1}(\cN(T,d,2^{-j}))\le4\int_{2^{-j-1}}^{2^{-j}}\psi^{-1}(\cN(T,d,\epsilon))\,d\epsilon$. Attach each point of a finite $S$ to a point of a fine net $T_L$ at distance at most $2^{-L}$, at a cost of at most $2^{-L}\psi^{-1}(|S|)$, which tends to $0$, and follow the parents. For (ii), stop at the level $j$ with $2^{-j}\ge\eta>2^{-j-1}$. The map built in this way depends on the fine level $L$; but every such map sends $S$ into the finite set $T_j$, so among the finitely many maps $S\to T_j$ one, $\pi$, has the least value of $\E\max_{t\in S}|X(t)-X(\pi(t))|$, which is then at most the cost of the map built from every $L$. Letting $L\to\infty$ gives (ii). For (i), let $\diam T>0$ (otherwise there is nothing to prove) and start from $T_{j_0}=\{t_0\}$ at the level with $2^{-j_0}>\diam T\ge2^{-j_0-1}$; this is allowed because one ball of radius $2^{-j_0}$ about any point covers $T$. This proves (i) for finite subsets of $T$ that contain $t_0$; since $T$ is countable, it is the union of an increasing sequence of such sets, and monotone convergence gives (i) for $T$.
+\end{proof}
+\begin{remark}
+  This is Step 1 of the book's proof of Theorem 4.4, before the triangle inequality doubles the bound, run through nets of $T$ (see the remark after \cref{thm:han-4-4}). The proof of Theorem 4.5 uses the same chaining stopped at scale $\eta$, which is (ii). As for the other chaining bounds, the index set is countable (\cref{chap:conventions}); \cref{lem:chaining-transfer} extends (i) to separable index sets with continuous paths.
+\end{remark}
+
+\begin{theorem}[Dudley; \han{Theorem 4.4}{74}]
+  \label{thm:han-4-4}
+  \uses{def:han-2-9, def:han-2-10, def:han-4-1}
+  \fid{adapted}
+  Let $\psi$ be a Young function and $\{X(t)\}_{t\in T}$ a process indexed by a countable pseudo-metric space $(T,d)$ with $\|X(t)\|_\psi<\infty$ and $\|X(s)-X(t)\|_\psi\le d(s,t)$ for all $s,t$. Then
+  \[
+    \E\sup_{s,t\in T}|X(s)-X(t)|\le8\int_0^{\diam T}\psi^{-1}\bigl(\cN(T,d,\epsilon)\bigr)\,d\epsilon.
+  \]
+\end{theorem}
+\begin{proof}
+  \uses{lem:chaining-one-sided}
+  If $T$ is empty there is nothing to prove. Otherwise fix $t_0\in T$. Since $|X(s)-X(t)|\le|X(s)-X(t_0)|+|X(t)-X(t_0)|$, the bound is twice that of \cref{lem:chaining-one-sided}(i).
+\end{proof}
+\begin{remark}
+  Stated with the internal covering number. The proof chains through nets of $T$, as in \cref{lem:chaining-one-sided}, rather than through nets of finite subsets of $T$: an internal cover of a subset must have its centres in the subset, so its covering numbers are compared with those of $T$ only at a different radius (\cref{lem:covering-subset}). The constant is the book's. The book states the theorem for a separable process; here the index set is countable, so the supremum is measurable (\cref{chap:conventions}), and \cref{lem:chaining-transfer} extends the bound to separable index sets with continuous paths.
+\end{remark}
+
+\begin{theorem}[Modulus of continuity; \han{Theorem 4.5}{76}]
+  \label{thm:han-4-5}
+  \uses{def:han-2-9, def:han-2-10, def:han-4-1}
+  \fid{adapted}
+  Under the hypotheses of \cref{thm:han-4-4}, for all $\eta,\delta>0$,
+  \[
+    \E\sup_{d(s,t)\le\delta}|X(t)-X(s)|\le16\int_0^{\eta}\psi^{-1}\bigl(\cN(T,d,\epsilon)\bigr)\,d\epsilon+\delta\,\psi^{-1}\bigl(\cN(T,d,\eta)^2\bigr).
+  \]
+\end{theorem}
+\begin{proof}
+  \uses{lem:chaining-one-sided, lem:han-2-1}
+  First let $S\subseteq T$ be finite. Since $T$ is countable, it is the union of an increasing sequence of finite sets, every pair $(s,t)$ with $d(s,t)\le\delta$ lies in one of them, and monotone convergence gives the bound for $T$. Take $\pi$ from \cref{lem:chaining-one-sided}(ii). For $s,t\in S$ with $d(s,t)\le\delta$, write $X(t)-X(s)$ as $X(t)-X(\pi(t))$, plus $X(\pi(t))-X(\pi(s))$, plus $X(\pi(s))-X(s)$. For each pair $(x,y)$ of image points that occurs, fix one pair $(u,v)$ in $S$ with $d(u,v)\le\delta$, $\pi(u)=x$ and $\pi(v)=y$, and bound $|X(x)-X(y)|$ by $|X(x)-X(u)|+|X(u)-X(v)|+|X(v)-X(y)|$. The four chaining terms contribute at most $4\cdot4\int_0^\eta\psi^{-1}(\cN(T,d,\epsilon))\,d\epsilon$. There are at most $\cN(T,d,\eta)^2$ pairs $(u,v)$, so \cref{lem:han-2-1} bounds the expected maximum of $|X(u)-X(v)|$ by $\delta\,\psi^{-1}(\cN(T,d,\eta)^2)$.
+\end{proof}
+\begin{remark}
+  Stated with the internal covering number. The book states the theorem for a separable process and passes from finite sets to $T$ by separability, with a limit $\delta'\downarrow\delta$; here the index set is countable (\cref{chap:conventions}), so monotone convergence suffices, and \cref{lem:chaining-transfer} extends the bound to separable index sets with continuous paths.
+\end{remark}
+
+\begin{corollary}[\han{Corollary 4.1}{77}]
+  \label{cor:han-4-1}
+  \uses{thm:han-4-5}
+  \fid{adapted}
+  With $\psi=\psi_2$ in \cref{thm:han-4-4}, for every $\delta>0$,
+  $\E\sup_{d(s,t)\le\delta}|X(t)-X(s)|\le18\int_0^\delta\sqrt{\log2\cN(T,d,\epsilon)}\,d\epsilon$.
+\end{corollary}
+\begin{proof}
+  \uses{thm:han-4-5}
+  Take $\eta=\delta$ in \cref{thm:han-4-5} and use $\psi_2^{-1}(x)=\sqrt{\log(1+x)}\le\sqrt{\log 2x}$ for $x\ge1$.
+\end{proof}
+\begin{remark}
+  The book states the corollary for a separable process; here the index set is countable, as in \cref{thm:han-4-4}. For a separable index set with continuous paths, \cref{lem:chaining-transfer} gives \cref{thm:han-4-5}, and the same step gives this bound. The integrand $\sqrt{\log2\cN}$ follows the conventions for entropy integrals (\cref{chap:conventions}).
+\end{remark}
+
+\begin{corollary}[$\psi_2$ chaining, oscillation; \han{Corollary 4.2}{78}]
+  \label{cor:han-4-2-global}
+  \uses{cor:han-4-1, thm:han-2-10}
+  \fid{adapted}
+  Under the hypotheses of \cref{cor:han-4-1},
+  $\bigl\|\sup_{s,t}|X(s)-X(t)|\bigr\|_{\psi_2}\le8\sqrt{2/\log2}\int_0^{\diam T}\psi_2^{-1}(\cN(T,d,\epsilon))\,d\epsilon$.
+\end{corollary}
+\begin{proof}
+  \uses{lem:han-2-3, thm:han-4-4, thm:han-2-10}
+  Run the chaining of \cref{thm:han-4-4} with $\psi_2$-norms in place of expectations: bound the increments of each level with \cref{lem:han-2-3} for $p=2$, whose multiplier satisfies $\sqrt{\log(2m)/\log2}\le\sqrt{2/\log2}\,\psi_2^{-1}(m)$, and add the levels with the triangle inequality for $\|\cdot\|_{\psi_2}$ (\cref{thm:han-2-10}).
+\end{proof}
+\begin{remark}
+  The book states the constant $8$. The argument here uses the multiplier of \cref{lem:han-2-3} and gives $8\sqrt{2/\log2}$. As in \cref{cor:han-4-1}, the index set is countable, while the book states the corollary for a separable process.
+\end{remark}
+
+\begin{corollary}[$\psi_2$ chaining, local modulus; \han{Corollary 4.2}{78}]
+  \label{cor:han-4-2-local}
+  \uses{cor:han-4-1, thm:han-2-10}
+  \fid{adapted}
+  Under the hypotheses of \cref{cor:han-4-1}, for every $\delta>0$,
+  $\bigl\|\sup_{d(s,t)\le\delta}|X(t)-X(s)|\bigr\|_{\psi_2}\le18\int_0^\delta\sqrt{\log2\cN(T,d,\epsilon)}\,d\epsilon$.
+\end{corollary}
+\begin{proof}
+  \uses{lem:han-2-3, thm:han-2-10}
+  The argument differs from the book's. By \cref{lem:han-2-3} with $p=2$, $\|\max_{i\le m}|Y_i|\|_{\psi_2}\le\sqrt{\log(2m)/\log2}\,\max_i\|Y_i\|_{\psi_2}$. Chain through nets of $T$ at the radii $\delta2^{-j}$, giving each point of a net a parent in the previous net; bound the increments of each level with this inequality and add the levels with the triangle inequality for $\|\cdot\|_{\psi_2}$ (\cref{thm:han-2-10}). The two fine chains contribute at most $(8/\sqrt{\log2})\int_0^{\delta/2}\sqrt{\log2\cN(T,d,\epsilon)}\,d\epsilon$. Two points at distance at most $\delta$ have representatives in the coarsest net at distance at most $5\delta$, and there are at most $\cN(T,d,\delta)^2$ such pairs, so they contribute at most $10\sqrt{2/\log2}\int_{\delta/2}^{\delta}\sqrt{\log2\cN(T,d,\epsilon)}\,d\epsilon$. Both coefficients are below $18$ and they multiply disjoint parts of the integral. Finite sets first, then $T$ by monotone convergence along finite sets increasing to $T$.
+\end{proof}
+\begin{remark}
+  The constant is the book's; only the proof differs. As in \cref{cor:han-4-1}, the index set is countable, while the book states the corollary for a separable process.
+\end{remark}
+
+\section{Separable index sets}
+
+\begin{lemma}[Countable reduction]
+  \label{lem:chaining-transfer}
+  \uses{def:han-4-1}
+  \fid{new}
+  Let $(T,d)$ be a separable pseudo-metric space and $\{X(t)\}_{t\in T}$ a real process whose paths $t\mapsto X(t)$ are continuous for $d$.
+  \begin{enumerate}
+    \item[(i)] For every $t_0\in T$ and $\delta\ge0$ there is a countable dense $T_0\subseteq T$ with $t_0\in T_0$ such that, at every sample point,
+    $\sup_{t\in T}|X(t)-X(t_0)|=\sup_{t\in T_0}|X(t)-X(t_0)|$,
+    $\sup_{s,t\in T}|X(s)-X(t)|=\sup_{s,t\in T_0}|X(s)-X(t)|$ and
+    $\sup_{s,t\in T,\,d(s,t)\le\delta}|X(s)-X(t)|=\sup_{s,t\in T_0,\,d(s,t)\le\delta}|X(s)-X(t)|$, as elements of $[0,\infty]$. In particular these suprema are random variables.
+    \item[(ii)] If $X$ satisfies the other hypotheses of \cref{thm:han-4-4}, the bounds of \cref{lem:chaining-one-sided}(i), \cref{thm:han-4-4} and \cref{thm:han-4-5} hold for $T$, with the same constants.
+  \end{enumerate}
+\end{lemma}
+\begin{proof}
+  \uses{lem:chaining-one-sided, thm:han-4-4, thm:han-4-5}
+  (i) Let $T_1$ be a countable dense subset of $T$. The maps $t\mapsto|X(t)-X(t_0)|$ and $(s,t)\mapsto|X(s)-X(t)|$ are continuous, so their suprema over $T$ and $T\times T$ equal those over the dense sets $T_1\cup\{t_0\}$ and its square. For pairs at distance at most $\delta$ a dense subset of $T$ does not suffice: pairs with $d(s,t)=\delta$ need not be limits of pairs from $T_1\times T_1$ at distance at most $\delta$. Instead, $I_\delta=\{(s,t):d(s,t)\le\delta\}$ is a subspace of the separable pseudo-metric space $T\times T$, so it has a countable dense subset $D$. Let $T_0$ consist of $T_1$, $t_0$ and both coordinates of every pair in $D$. Then $\sup_{I_\delta}=\sup_D\le\sup_{I_\delta\cap(T_0\times T_0)}\le\sup_{I_\delta}$.
+
+  (ii) Apply the bounds to $T_0$, on which the hypotheses still hold; by (i) the left-hand sides are those for $T$. On the right, $\diam T_0\le\diam T$. Let $\eta>0$. Moving each centre of an $\epsilon$-cover $C\subseteq T$ of $T$ to a point of $T_0$ within distance $\eta$ gives an $(\epsilon+\eta)$-cover of $T_0$ by closed balls with centres in $T_0$, so $\cN(T_0,d,\epsilon+\eta)\le\cN(T,d,\epsilon)$. Hence $\psi^{-1}(\cN(T_0,d,\epsilon))$ is at most the left limit at $\epsilon$ of the nonincreasing function $\epsilon\mapsto\psi^{-1}(\cN(T,d,\epsilon))$, which differs from the function at only countably many $\epsilon$; so the entropy integrals for $T_0$ are at most those for $T$, and the constants $4$, $8$ and $16$ are unchanged. For the term $\delta\,\psi^{-1}(\cN(T,d,\eta)^2)$ of \cref{thm:han-4-5}, apply the bound for $T_0$ at $\eta+\kappa$ and let $\kappa\downarrow0$: the second term is at most $\delta\,\psi^{-1}(\cN(T,d,\eta)^2)$, and if $\cN(T,d,\eta)$ is finite the integrand for $T$ is bounded on $[\eta,\eta+\kappa]$, so the integral up to $\eta+\kappa$ tends to the integral up to $\eta$; if it is infinite the bound is trivial. (External covering numbers need no such step, since $\cNext(T_0,d,\epsilon)\le\cNext(T,d,\epsilon)$.)
+\end{proof}
+\begin{remark}
+  The book states its chaining bounds for separable processes (\cref{def:han-2-5}). Here they are stated for countable index sets, and this lemma extends them to separable index sets whose paths are continuous (\cref{chap:conventions}).
+\end{remark}

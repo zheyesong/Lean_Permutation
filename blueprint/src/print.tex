@@ -1,0 +1,32 @@
+% Print version of the blueprint, compiled with xelatex through latexmk
+% (see latexmkrc). Based on the leanblueprint template.
+
+\documentclass[a4paper]{report}
+
+\usepackage{geometry}
+
+\usepackage{expl3}
+
+\usepackage{amssymb, amsthm, mathtools}
+\usepackage[unicode,colorlinks=true,linkcolor=blue,urlcolor=magenta, citecolor=blue]{hyperref}
+\usepackage{thmtools}
+\usepackage[capitalize]{cleveref}
+
+\usepackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+
+% Long declaration names cannot be hyphenated; allow looser lines instead of
+% lines that run into the margin.
+\setlength{\emergencystretch}{3em}
+\tolerance=2000
+
+\input{macros/common}
+\input{macros/print}
+
+\title{Permutation processes: a blueprint}
+\author{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\input{content}
+\end{document}
