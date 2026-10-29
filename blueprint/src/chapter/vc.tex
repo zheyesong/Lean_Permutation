@@ -1,0 +1,263 @@
+\chapter{Vapnik--Chervonenkis classes}
+\label{chap:vc}
+
+\section{Traces, shattering and VC dimension}
+
+\begin{definition}[Trace]
+  \label{def:trace}
+  \fid{new}
+  For a class $\cC$ of subsets of a set $\cX$ and a finite set $S\subseteq\cX$, the trace of $\cC$ on $S$ is the finite family $\cC\cap S=\{C\cap S:C\in\cC\}$ of subsets of $S$.
+\end{definition}
+
+\begin{definition}[Growth function; \han{Definition 4.7}{88}]
+  \label{def:han-4-7}
+  \uses{def:trace}
+  \fid{adapted}
+  $\Pi_{\cC}(n)=\max\bigl\{|\cC\cap S|:S\subseteq\cX\text{ finite},\ |S|\le n\bigr\}$. When $\cX$ is nonempty this is the book's $\max_{x_1,\dots,x_n\in\cX}\bigl|\cC\cap\{x_1,\dots,x_n\}\bigr|$, since the points may repeat; the form with sets also covers an empty $\cX$.
+\end{definition}
+
+\begin{definition}[Shattering; \han{Definition 4.8}{88}]
+  \label{def:han-4-8}
+  \uses{def:trace}
+  \fid{adapted}
+  $\cC$ shatters a finite set $S$ if every subset of $S$ is of the form $C\cap S$ with $C\in\cC$.
+\end{definition}
+
+\begin{definition}[VC dimension; \han{Definition 4.9}{88}]
+  \label{def:han-4-9}
+  \uses{def:han-4-8}
+  \fid{adapted}
+  The VC dimension $\nu(\cC)\in\Nat\cup\{\infty\}$ is the supremum of the cardinalities of the finite sets shattered by $\cC$; the empty class shatters no set, not even $\varnothing$, and has VC dimension $0$. $\cC$ is a VC class if $\nu(\cC)<\infty$.
+\end{definition}
+
+\begin{lemma}[Shattering and traces]
+  \label{lem:shatters-trace}
+  \uses{def:han-4-8, def:trace}
+  \fid{new}
+  $\cC$ shatters a finite set $S$ if and only if the trace $\cC\cap S$ shatters $S$ in Mathlib's sense (\texttt{Finset.Shatters}): every subset of $S$ is $S\cap T$ for some $T\in\cC\cap S$.
+\end{lemma}
+\begin{proof}
+  For $T=C\cap S$ with $C\in\cC$, $S\cap T=C\cap S$.
+\end{proof}
+
+\begin{lemma}[VC dimension of a trace]
+  \label{lem:vcdim-trace}
+  \uses{def:han-4-9, def:trace, lem:shatters-trace}
+  \fid{new}
+  For a finite set $S$, the VC dimension of the class $\{C\cap S:C\in\cC\}$ is Mathlib's \texttt{Finset.vcDim} of the trace $\cC\cap S$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:shatters-trace}
+  A set shattered by $\{C\cap S:C\in\cC\}$ lies in $S$, and the two classes shatter the same subsets of $S$ by \cref{lem:shatters-trace}; both suprema are taken over these sets.
+\end{proof}
+
+\begin{lemma}[Pajor; \han{Lemma 4.6}{88}]
+  \label{lem:han-4-6}
+  \mathlibok
+  \fid{Mathlib}
+  A finite family $\mathcal U$ of finite sets has at most as many members as there are sets shattered by $\mathcal U$.
+  In Mathlib: \mathlibname{Finset.card\_le\_card\_shatterer}.
+\end{lemma}
+
+\begin{lemma}[Sauer--Shelah for finite families]
+  \label{lem:sauer-shelah-finset}
+  \mathlibok
+  \fid{Mathlib}
+  For a family $\mathcal A$ of subsets of a finite set $\alpha$, the number of sets shattered by $\mathcal A$ is at most $\sum_{k\le\nu(\mathcal A)}\binom{|\alpha|}{k}$.
+  In Mathlib: \mathlibname{Finset.card\_shatterer\_le\_sum\_vcDim}.
+\end{lemma}
+
+\begin{lemma}[Vapnik--Chervonenkis, Sauer, Shelah; \han{Lemma 4.5}{88}]
+  \label{lem:han-4-5-i}
+  \uses{def:han-4-9, def:han-4-7}
+  \fid{adapted}
+  If $\nu=\nu(\cC)<\infty$, then for all $x_1,\dots,x_n\in\cX$,
+  $\bigl|\cC\cap\{x_1,\dots,x_n\}\bigr|\le\sum_{i=0}^{\nu}\binom ni\le(n+1)^\nu$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-4-6, lem:sauer-shelah-finset, lem:shatters-trace, lem:vcdim-trace}
+  Apply \cref{lem:han-4-6,lem:sauer-shelah-finset} to the trace on $\{x_1,\dots,x_n\}$, whose VC dimension is at most $\nu$ by \cref{lem:shatters-trace,lem:vcdim-trace}.
+\end{proof}
+
+\begin{lemma}[\han{Lemma 4.5}{88}, second bound]
+  \label{lem:han-4-5-ii}
+  \uses{def:han-4-9}
+  \fid{adapted}
+  Under the hypotheses of \cref{lem:han-4-5-i}, if $1\le\nu\le n$, then $\bigl|\cC\cap\{x_1,\dots,x_n\}\bigr|\le(en/\nu)^\nu$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-4-5-i}
+  Put $x=\nu/n\in(0,1]$. By \cref{lem:han-4-5-i}, the left side is at most $\sum_{i\le\nu}\binom ni\le x^{-\nu}\sum_{i\le n}\binom nix^i=x^{-\nu}(1+x)^n\le x^{-\nu}e^{xn}=(en/\nu)^\nu$. The book calls this ``simple algebra''.
+\end{proof}
+\begin{remark}
+  The condition $1\le\nu\le n$ is added; the proof uses $0<\nu/n\le1$.
+\end{remark}
+
+\begin{lemma}[A bound on sums of binomial coefficients]
+  \label{lem:binomial-sum-bound}
+  \fid{new}
+  For all natural numbers $k$ and $\nu$, $\sum_{i\le\nu}\binom ki\le1+k^\nu$.
+\end{lemma}
+\begin{proof}
+  The nonempty subsets of $\{1,\dots,k\}$ with at most $\nu$ elements inject into the maps from $\{1,\dots,\nu\}$ to $\{1,\dots,k\}$: list the elements of a subset in increasing order and repeat the last one until the list has length $\nu$; the subset is the set of values of the map. There are $k^\nu$ such maps, and the empty set adds $1$.
+\end{proof}
+
+\begin{lemma}[Half-lines; \han{Example 4.2}{88}]
+  \label{lem:han-ex-4-2}
+  \uses{def:han-4-9, def:han-4-7}
+  \fid{as printed}
+  The class $\{(-\infty,a]:a\in\R\}$ has VC dimension $1$ and growth function at most $n+1$.
+\end{lemma}
+
+\begin{lemma}[Intervals; \han{Example 4.3}{88}]
+  \label{lem:han-ex-4-3}
+  \uses{def:han-4-9, def:han-4-7}
+  \fid{adapted}
+  The class $\{(b,a]:b<a\}$ has VC dimension $2$ and growth function at most $(n+1)^2$.
+\end{lemma}
+\begin{remark}
+  The book's class $\{(b,a]:a,b\in\R\}$ also contains the empty interval. Leaving it out changes neither the VC dimension nor the growth function, since the empty set has the same trace on a finite set as an interval that misses it. The book writes the bound on the growth function with the subscript of the class of half-lines; it is read here for the class of intervals of this example.
+\end{remark}
+
+\section{Stability and vector spaces of functions}
+
+\begin{theorem}[Stability; \han{Theorem 4.10}{90}]
+  \label{thm:han-4-10}
+  \uses{def:han-4-9, def:han-4-7}
+  \fid{adapted}
+  Let $\cC,\mathcal D$ be VC classes on $\cX$ and $\mathcal E$ a VC class on $\mathcal W$. Then: (1) $\{\cX\setminus C:C\in\cC\}$ has the VC dimension and growth function of $\cC$; (2) $\{C\cap D\}$ and (3) $\{C\cup D\}$ ($C\in\cC$, $D\in\mathcal D$) have growth functions at most $\Pi_{\cC}\Pi_{\mathcal D}$; (4) $\{D\times E\}$ has growth function at most $\Pi_{\mathcal D}\Pi_{\mathcal E}$; (5) if $\varphi:\cX\to\mathcal W$ is injective, $\{\varphi(C)\}$ has VC dimension $\nu(\cC)$; (6) for any map $\phi:\mathcal W\to\cX$, $\{\phi^{-1}(C)\}$ has VC dimension at most $\nu(\cC)$.
+\end{theorem}
+\begin{remark}
+  Cited in the book (Kosorok, 2008, Lemma 9.7; Gin\'e and Nickl, 2016, Proposition 3.6.7; Devroye et al., 1996, Theorem 13.5). Gin\'e and Nickl state that these classes are again VC; the growth-function bounds have not been checked against a source. In item (4) the growth functions are those of $\mathcal D$ and $\mathcal E$.
+\end{remark}
+
+\begin{proposition}[\han{Proposition 4.1}{90}]
+  \label{prop:han-4-1}
+  \uses{def:han-4-9}
+  \fid{adapted}
+  If $\mathcal G$ is a finite-dimensional vector space of real functions on $\cX$, then the class $\{\{x:g(x)\le0\}:g\in\mathcal G\}$ has VC dimension at most $\dim\mathcal G$.
+\end{proposition}
+\begin{remark}
+  The book states this for functions on $\R^d$; it is stated here for functions on an arbitrary set $\cX$, because \cref{lem:han-ex-4-6} applies it to functions on $\cX\times\R$.
+\end{remark}
+
+\begin{lemma}[Half-spaces; \han{Example 4.4}{91}]
+  \label{lem:han-ex-4-4}
+  \uses{def:han-4-9}
+  \fid{as printed}
+  The half-spaces $\{x\in\R^d:a^\top x\le b\}$ form a class of VC dimension at most $d+1$.
+\end{lemma}
+\begin{proof}
+  \uses{prop:han-4-1}
+  \Cref{prop:han-4-1} for the span of $x_1,\dots,x_d,1$.
+\end{proof}
+
+\begin{lemma}[Balls; \han{Example 4.5}{91}]
+  \label{lem:han-ex-4-5}
+  \uses{def:han-4-9}
+  \fid{as printed}
+  The closed Euclidean balls of $\R^d$ form a class of VC dimension at most $d+2$.
+\end{lemma}
+\begin{proof}
+  \uses{prop:han-4-1}
+  \Cref{prop:han-4-1} for the span of $x_1,\dots,x_d,1,\|x\|^2$.
+\end{proof}
+
+\section{VC-subgraph classes}
+
+\begin{definition}[Subgraph, VC-subgraph class; \han{Definition 4.10}{92}]
+  \label{def:han-4-10}
+  \uses{def:han-4-9}
+  \fid{as printed}
+  The subgraph of $f:\cX\to\R$ is $G_f=\{(x,t)\in\cX\times\R:t\le f(x)\}$. A class $\cF$ of functions is VC-subgraph of index $\nu$ if $\{G_f:f\in\cF\}$ is a VC class of VC dimension $\nu$.
+\end{definition}
+
+\begin{lemma}[Indicators; \han{Exercise 4.4}{92}]
+  \label{lem:han-exr-4-4}
+  \uses{def:han-4-10}
+  \fid{as printed}
+  If $\cC$ is a VC class of VC dimension $\nu$, then $\{\ind_C:C\in\cC\}$ is VC-subgraph of index $\nu$.
+\end{lemma}
+
+\begin{lemma}[Vector spaces of functions; \han{Example 4.6}{92}]
+  \label{lem:han-ex-4-6}
+  \uses{def:han-4-10}
+  \fid{as printed}
+  A finite-dimensional vector space $\cF$ of measurable functions is VC-subgraph of index at most $\dim\cF+1$.
+\end{lemma}
+\begin{proof}
+  \uses{prop:han-4-1}
+  \Cref{prop:han-4-1} for the vector space of functions on $\cX\times\R$ spanned by $(x,t)\mapsto t$ and $(x,t)\mapsto f(x)$, $f\in\cF$.
+\end{proof}
+
+\begin{theorem}[Dudley--Pollard universality; \han{Theorem 4.11}{92}]
+  \label{thm:han-4-11}
+  \uses{def:han-4-10, def:han-4-1, def:lp-class-pseudometric}
+  \fid{adapted}
+  Let $\cF$ be a nonempty VC-subgraph class of index $\nu\ge1$ with an envelope $F$, let $Q$ be a probability measure with $0<QF^p<\infty$ for some $1\le p<\infty$, and let $w>\nu$. Put $m_{\nu,w}=\max\bigl(\{0\}\cup\{m\in\Nat:m\ge1,\ \log m\ge m^{1/\nu-1/w}\}\bigr)$. Then for $0<\epsilon\le2$,
+  \[
+    \cD\bigl(\cF,L^p(Q),\epsilon\|F\|_{L^p(Q)}\bigr)\le m_{\nu,w}\vee2^{w/\nu}\bigl(2^{p+1}/\epsilon^p\bigr)^w.
+  \]
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-4-5-i, lem:binomial-sum-bound}
+  The book's probabilistic method, with the choice of $k$ made explicit and three additions. Start from a finite family $f_1,\dots,f_m$ in $\cF$ whose members are pairwise more than $\epsilon\|F\|_{L^p(Q)}$ apart, because the packing number might a priori be infinite, and show that $m$ is at most the right-hand side. If $m=1$, this holds because $\epsilon\le2$ makes the right-hand side larger than $1$; this is the only place where $\epsilon\le2$ is used. Let $m\ge2$; then $\epsilon<2$, because $|f_i-f_j|\le2F$. Put $c=(\epsilon/2)^p\in(0,1)$ and draw $k$ independent points from the law on $\cX\times\R$ used in the book; the subgraphs of $f_i$ and $f_j$ then have the same trace on the sample with probability at most $(1-c)^k$. Take the least $k$ with $\binom m2(1-c)^k<1$, rather than with the book's larger bound $\binom m2e^{-ck}<1$; then $1\le k\le(2^{p+1}/\epsilon^p)\log m$ for every $m\ge2$. The book's choice of $k$ also satisfies this bound, since a separated family of three or more functions forces $c<2/3<\log2$ (a point lies in at most two of the three pairwise symmetric differences of three subgraphs). With positive probability the $m$ subgraphs have pairwise different traces on the sample, so \cref{lem:han-4-5-i,lem:binomial-sum-bound} give $m\le\sum_{i\le\nu}\binom ki\le1+k^\nu\le2k^\nu$; the last step uses $k\ge1$, and the bound $(k+1)^\nu$ of \cref{lem:han-4-5-i} would not suffice. Finally, if $m>m_{\nu,w}$ then $\log m<m^{1/\nu-1/w}$, and the book's algebra gives $m<2^{w/\nu}(2^{p+1}/\epsilon^p)^w$.
+\end{proof}
+\begin{remark}
+  The range $0<\epsilon\le2$ is added: the packing number of a nonempty class is at least $1$, and the proof uses $\epsilon\le2$ for the case $m=1$. Uses of the theorem need only this range. The book writes ``for some $w>\nu$''; the bound holds for every $w>\nu$.
+\end{remark}
+
+\begin{lemma}[VC-subgraph stability; \han{Lemma 4.7}{94}]
+  \label{lem:han-4-7}
+  \uses{def:han-4-10}
+  \fid{as printed}
+  If $\cF$ and $\mathcal G$ are VC-subgraph classes and $g$, $\phi$, $\psi$ are fixed functions with $\phi$ monotone, then $\cF\wedge\mathcal G$, $\cF\vee\mathcal G$, $-\cF$, $\cF+g$, $\cF\cdot g$, $\cF\circ\psi$ and $\phi\circ\cF$ are VC-subgraph, and $\{\{f>0\}:f\in\cF\}$ is a VC class.
+\end{lemma}
+\begin{remark}
+  Exercise 4.5 of the book, which the Notes attribute to van der Vaart and Wellner (1996), Lemma 2.6.18. Not checked.
+\end{remark}
+
+\section{VC-hull and VC-major classes}
+
+\begin{definition}[Convex hull; \han{Definition 4.11}{94}]
+  \label{def:han-4-11}
+  \fid{adapted}
+  $\mathrm{co}(\cF)$ is the set of finite convex combinations of elements of $\cF$, and $\overline{\mathrm{co}}(\cF)$ the set of pointwise limits of sequences in $\mathrm{co}(\cF)$.
+\end{definition}
+
+\begin{definition}[VC-hull, VC-major; \han{Definitions 4.12--4.13}{95}]
+  \label{def:han-4-12}
+  \uses{def:han-4-11, def:han-4-10}
+  \fid{adapted}
+  A VC-hull class is a class contained in $\overline{\mathrm{co}}(\cF)$ for a VC-subgraph class $\cF$. A class $\cF$ is VC-major if $\{\{x:f(x)\ge t\}:f\in\cF,\ t\in\R\}$ is a VC class.
+\end{definition}
+\begin{remark}
+  The book calls $\overline{\mathrm{co}}(\cF)$ itself a VC-hull class. Here a VC-hull class is any class contained in it, the form that \cref{lem:han-4-8} needs.
+\end{remark}
+
+\begin{lemma}[Monotone functions; \han{Example 4.8}{95}]
+  \label{lem:han-ex-4-8}
+  \uses{def:han-4-11}
+  \fid{as printed}
+  Every nondecreasing $f:\R\to[0,1]$ lies in $\overline{\mathrm{co}}\bigl(\{\ind_{(x,\infty)},\ind_{[x,\infty)}:x\in\R\}\bigr)$.
+\end{lemma}
+
+\begin{lemma}[\han{Lemma 4.8}{95}]
+  \label{lem:han-4-8}
+  \uses{def:han-4-12}
+  \fid{adapted}
+  A bounded VC-major class is a scalar multiple of a VC-hull class.
+\end{lemma}
+\begin{remark}
+  The sentence is the book's, with VC-hull classes in the sense of \cref{def:han-4-12}.
+\end{remark}
+
+\begin{theorem}[Entropy of VC-hulls; \han{Theorem 4.12}{95}]
+  \label{thm:han-4-12}
+  \uses{def:han-4-11, def:han-4-1, def:lp-class-pseudometric}
+  \fid{adapted}
+  Let $Q$ be a probability measure on $\cX$ and $\cF$ a class of measurable functions with envelope $F\in L^2(Q)$. If $\cN(\cF,L^2(Q),\epsilon\|F\|_{L^2(Q)})\le C\epsilon^{-w}$ for $0<\epsilon\le1$, with constants $C$ and $w>0$, then $\log\cN(\overline{\mathrm{co}}(\cF),L^2(Q),\epsilon\|F\|_{L^2(Q)})\le K\epsilon^{-2w/(w+1)}$ for $0<\epsilon\le1$, with $K=K(C,w)$.
+\end{theorem}
+\begin{remark}
+  Cited in the book (Gin\'e and Nickl, 2016, Theorem 3.6.17), which gives the exponent $2w/(w+2)$; for $\epsilon\le1$ that bound implies the one stated here. The condition $w>0$ is added.
+\end{remark}

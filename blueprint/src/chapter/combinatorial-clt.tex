@@ -1,0 +1,243 @@
+\chapter{Combinatorial sums and the combinatorial CLT}
+\label{chap:combinatorial-clt}
+
+The book's Theorem 3.1 (a Berry--Esseen bound in Kolmogorov distance, cited from Chen, Goldstein and Shao, 2010) is not part of this blueprint. Its uses are replaced by \cref{thm:han-3-2}, which the book proves.
+
+\section{Combinatorial sums}
+
+\begin{definition}[Arrays; \han{\S3.1}{41}]
+  \label{def:array}
+  \fid{as printed}
+  Let $A=(a_{ij})_{i,j\in[N]}$ be a real array, $a_{i\bullet}$, $a_{\bullet j}$, $a_{\bullet\bullet}$ its row, column and overall means, and $d_{ij}=a_{ij}-a_{i\bullet}-a_{\bullet j}+a_{\bullet\bullet}$ its double centring, so that every row and column of $D=(d_{ij})$ sums to zero. Put
+  \[
+    \mu_A=\frac1N\sum_{i,j}a_{ij},\qquad\sigma_A^2=\frac1{N-1}\sum_{i,j}d_{ij}^2,\qquad B_A=\max_{i,j}|d_{ij}|.
+  \]
+\end{definition}
+
+\begin{definition}[Combinatorial sum; \han{\S3.1}{41}]
+  \label{def:combinatorial-sum}
+  \uses{def:array, def:uniform-permutation}
+  \fid{as printed}
+  For a uniform random permutation $\pi$, $Y=\sum_{i}a_{i\pi(i)}$.
+\end{definition}
+
+\begin{lemma}[\han{Lemma 3.1}{42}]
+  \label{lem:han-3-1}
+  \uses{def:array}
+  \fid{adapted}
+  For every permutation $s\in\SN$, $\sum_ia_{is(i)}-\mu_A=\sum_id_{is(i)}$.
+\end{lemma}
+\begin{proof}
+  $s$ is a bijection, so $\sum_ia_{\bullet s(i)}=\sum_ja_{\bullet j}$; the row, column and overall means each contribute $\mu_A$.
+\end{proof}
+
+\begin{proposition}[Mean and variance; \han{Proposition 3.1}{42}]
+  \label{prop:han-3-1}
+  \uses{def:combinatorial-sum}
+  \fid{adapted}
+  $\E Y=\mu_A$, $Y-\E Y=\sum_id_{i\pi(i)}$, and $\Var Y=\sigma_A^2$.
+\end{proposition}
+\begin{proof}
+  \uses{lem:han-3-1, prop:han-1-1-i}
+  The mean from the one-dimensional marginals of \cref{prop:han-1-1-i}; the variance from \cref{lem:han-3-1} and the two-dimensional marginals.
+\end{proof}
+
+\begin{corollary}[Combinatorial law of large numbers; \han{Corollary 3.1}{43}]
+  \label{cor:han-3-1}
+  \uses{def:combinatorial-sum}
+  \fid{adapted}
+  For arrays $A_N$ with $\sigma_{A_N}\to0$ as $N\to\infty$, $\Pr(|Y_N-\mu_{A_N}|>\epsilon)\to0$ for every $\epsilon>0$.
+\end{corollary}
+\begin{proof}
+  \uses{prop:han-3-1, lem:chebyshev}
+  \Cref{prop:han-3-1} and \cref{lem:chebyshev}.
+\end{proof}
+
+\section{Stein's method of exchangeable pairs}
+
+\begin{definition}[Wasserstein distance to the normal; \han{\S3.3.1}{45}]
+  \label{def:dw}
+  \fid{adapted}
+  For a real random variable $W$ with $\E|W|<\infty$ and $Z\sim N(0,1)$, $d_W(W,Z)=\sup_g|\E g(W)-\E g(Z)|$ over all $1$-Lipschitz $g:\R\to\R$.
+\end{definition}
+
+\begin{lemma}[Wasserstein convergence gives weak convergence]
+  \label{lem:dw-weak}
+  \uses{def:dw, def:han-2-2}
+  \fid{new}
+  If $d_W(W_n,Z)\to0$, then $W_n\Rightarrow Z$.
+\end{lemma}
+\begin{proof}
+  \uses{prop:han-2-1}
+  Bounded Lipschitz test functions suffice (\cref{prop:han-2-1}).
+\end{proof}
+
+\begin{lemma}[Stein's identity; \han{Lemma 3.2}{45}]
+  \label{lem:han-3-2}
+  \fid{as printed}
+  If $Z\sim N(0,1)$, then $\E f'(Z)=\E[Zf(Z)]$ for every absolutely continuous $f$ with $\E|f'(Z)|<\infty$. Conversely, if this holds for all bounded, continuous, piecewise continuously differentiable $f$ with $\E|f'(Z)|<\infty$, then $Z\sim N(0,1)$.
+\end{lemma}
+\begin{remark}
+  Cited in the book (Chen, Goldstein and Shao, 2010, Lemma 2.1).
+\end{remark}
+
+\begin{lemma}[Solution of the Stein equation; \han{Lemma 3.16}{65}]
+  \label{lem:han-3-16}
+  \fid{adapted}
+  For a $1$-Lipschitz $g$ and $Z\sim N(0,1)$,
+  $f_g(w)=e^{w^2/2}\int_{-\infty}^w\bigl(g(x)-\E g(Z)\bigr)e^{-x^2/2}\,dx$
+  is the bounded solution of $f'(w)-wf(w)=g(w)-\E g(Z)$.
+\end{lemma}
+\begin{proof}
+  Exercise 3.7 of the book.
+\end{proof}
+
+\begin{lemma}[Bounds on the solution; \han{Lemma 3.17}{65}]
+  \label{lem:han-3-17}
+  \uses{lem:han-3-16}
+  \fid{adapted}
+  The function $f_g$ of \cref{lem:han-3-16} is continuously differentiable, $\|f_g\|_\infty\le1$, $\|f_g'\|_\infty\le\sqrt{2/\pi}$, and $f_g'$ is $2$-Lipschitz.
+\end{lemma}
+
+\begin{lemma}[\han{Lemma 3.3}{45}]
+  \label{lem:han-3-3}
+  \uses{def:dw}
+  \fid{adapted}
+  Let $\mathcal L'(1)$ be the set of continuously differentiable $f$ with $\|f\|_\infty\le1$, $\|f'\|_\infty\le\sqrt{2/\pi}$ and $f'$ $2$-Lipschitz. For every $W$ with $\E|W|<\infty$,
+  $d_W(W,Z)\le\sup_{f\in\mathcal L'(1)}\bigl|\E[f'(W)-Wf(W)]\bigr|$.
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-3-16, lem:han-3-17}
+  Insert $W$ into the Stein equation of \cref{lem:han-3-16} and use \cref{lem:han-3-17}.
+\end{proof}
+
+\begin{definition}[Exchangeable pair; \han{Definition 3.1}{46}]
+  \label{def:han-3-1}
+  \fid{as printed}
+  Random elements $(W,W')$ form an exchangeable pair if $(W,W')$ and $(W',W)$ have the same law.
+\end{definition}
+
+\begin{lemma}[Exchangeable-pair bound; \han{Lemma 3.4}{46}]
+  \label{lem:han-3-4}
+  \uses{def:han-3-1, def:dw}
+  \fid{as printed}
+  Let $(W,W')$ be an exchangeable pair of real random variables with $\E W^2=1$ and $\E[W'-W\mid W]=-\lambda W$ for some $\lambda\in(0,1)$. Then
+  \[
+    d_W(W,Z)\le\sqrt{\frac2\pi\Var\Bigl(\E\Bigl[\frac{(W'-W)^2}{2\lambda}\Bigm|W\Bigr]\Bigr)}+\frac1{3\lambda}\E|W'-W|^3.
+  \]
+\end{lemma}
+\begin{proof}
+  \uses{lem:han-3-3}
+  Taylor expansion of an antiderivative of $f\in\mathcal L'(1)$ and exchangeability, then \cref{lem:han-3-3}.
+\end{proof}
+
+\begin{lemma}[Exchangeable permutations; \han{Exercise 3.2}{48}]
+  \label{lem:perm-exchangeable}
+  \uses{def:han-3-1, def:uniform-permutation}
+  \fid{adapted}
+  Let $\pi$ be a uniform random permutation and $I,J$ i.i.d.\ uniform on $[N]$, independent of $\pi$, and let $\pi'=\pi\circ(I\,J)$, where $(I\,J)$ is the transposition (the identity if $I=J$). Then $(\pi,\pi')$ is an exchangeable pair.
+\end{lemma}
+
+\begin{lemma}[Conditioning reduces variance; \han{Lemma 3.5}{50}]
+  \label{lem:han-3-5}
+  \fid{adapted}
+  If $\E Y^2<\infty$ and $X$ is a measurable function of $Z$, then $\Var(\E[Y\mid X])\le\Var(\E[Y\mid Z])$.
+\end{lemma}
+\begin{proof}
+  Exercise 3.3 of the book.
+\end{proof}
+
+\section{The combinatorial CLT}
+
+\begin{theorem}[Combinatorial CLT, weaker version; \han{Theorem 3.2}{47}]
+  \label{thm:han-3-2}
+  \uses{def:combinatorial-sum, def:dw}
+  \fid{adapted}
+  There is a universal constant $K$ such that for all $N\ge4$ and all arrays $A$ with $\sigma_A>0$,
+  \[
+    d_W\Bigl(\frac{Y-\E Y}{\sqrt{\Var Y}},Z\Bigr)\le K\Biggl(\frac{\sum_{i,j}|d_{ij}|^3}{N\sigma_A^3}+\sqrt{\frac{\sum_{i,j}d_{ij}^4}{N\sigma_A^4}}\Biggr).
+  \]
+\end{theorem}
+\begin{proof}
+  \uses{lem:han-3-4, lem:perm-exchangeable, lem:han-3-1, prop:han-3-1, prop:han-1-1-i, lem:han-3-5}
+  Apply \cref{lem:han-3-4} to $W=\sum_id_{i\pi(i)}/\sigma_A$ and $W'$ the same sum for $\pi'$ of \cref{lem:perm-exchangeable}, with $\lambda=2/N$. The third-moment term is at most $16\sum|d_{ij}|^3/(N\sigma_A^3)$. For the variance term, bound $\Var(\E[(W'-W)^2\mid\pi])$ and use \cref{lem:han-3-5}.
+\end{proof}
+\begin{remark}
+  The proof here follows the book's, with the case analysis for the variance term written out in full and some constants recomputed; the variance term can also be handled through an exact identity for $\E[(W'-W)^2\mid\pi]$. The constant $K$ is not computed. The hypothesis $\sigma_A>0$ is stated, since the bound divides by $\sigma_A$.
+\end{remark}
+
+\begin{lemma}[Kolmogorov distance from Wasserstein distance; \han{Exercise 3.1}{45}]
+  \label{lem:kolmogorov-from-dw}
+  \uses{def:dw}
+  \fid{adapted}
+  If $Z$ has a density bounded by $C$, then $\sup_t|\Pr(W\le t)-\Pr(Z\le t)|\le\sqrt{2C\,d_W(W,Z)}$.
+\end{lemma}
+
+\begin{corollary}[\han{Corollary 3.3}{48}]
+  \label{cor:han-3-3}
+  \uses{def:combinatorial-sum}
+  \fid{adapted}
+  There is a universal constant $K$ such that for all $N\ge4$ and $\sigma_A>0$,
+  $\sup_t\bigl|\Pr\bigl((Y-\E Y)/\sqrt{\Var Y}\le t\bigr)-\Phi(t)\bigr|\le K\sqrt{B_A/\sigma_A}$.
+\end{corollary}
+\begin{proof}
+  \uses{thm:han-3-2, lem:kolmogorov-from-dw}
+  Both terms of \cref{thm:han-3-2} are at most $B_A/\sigma_A$; then \cref{lem:kolmogorov-from-dw}.
+\end{proof}
+
+\section{A truncation lemma}
+
+\begin{lemma}[Double centring is an orthogonal projection]
+  \label{lem:double-centring-projection}
+  \uses{def:array}
+  \fid{new}
+  For the inner product $\langle a,b\rangle=\sum_{i,j}a_{ij}b_{ij}$ on $N\times N$ arrays, double centring is the orthogonal projection onto the arrays whose rows and columns all sum to zero. In particular it is linear, it fixes doubly centred arrays, and $\sum_{i,j}d_{ij}^2\le\sum_{i,j}a_{ij}^2$.
+\end{lemma}
+\begin{proof}
+  With $P=I-\frac1NJ$, where $J$ is the all-ones matrix, $D=PAP$, and $P$ is symmetric and idempotent.
+\end{proof}
+
+\begin{lemma}[Truncation lemma]
+  \label{lem:trunc-clt}
+  \uses{def:combinatorial-sum, def:han-2-2}
+  \fid{new}
+  Let $A_N$ be $N\times N$ arrays with $\sigma_{A_N}>0$, and $L_N=\sum_{i,j}|d_{ij}|^3/(N\sigma_{A_N}^3)$. If $L_N\to0$, then $(Y_N-\E Y_N)/\sigma_{A_N}\Rightarrow N(0,1)$.
+\end{lemma}
+\begin{proof}
+  \uses{thm:han-3-2, lem:double-centring-projection, prop:han-3-1, lem:dw-weak}
+  Normalize so that $\sigma_A=1$, put $M=L^{1/3}$, and split $d=\tilde u+\tilde w$, where $\tilde u$ and $\tilde w$ are the double centrings of $d\ind(|d|\le M)$ and $d\ind(|d|>M)$ (\cref{lem:double-centring-projection}).
+  The combinatorial sum of $\tilde w$ has mean $0$ and variance at most $\frac N{N-1}L/M$ (\cref{prop:han-3-1}), and the standard deviation $\sigma_{\tilde u}$ of the sum of $\tilde u$ differs from $1$ by at most the square root of that.
+  The entries of $\tilde u$ are at most $4M$ in absolute value, so both terms of \cref{thm:han-3-2} for $\tilde u$ are at most $4M/\sigma_{\tilde u}$.
+  Testing against $1$-Lipschitz functions gives $d_W\le C\,L^{1/3}$ with a universal $C$; conclude with \cref{lem:dw-weak}.
+\end{proof}
+\begin{remark}
+  $L_N$ is the quantity in the Berry--Esseen bound of the book's Theorem 3.1. The proof gives the rate $d_W\le C\,L_N^{1/3}$, which is weaker than that bound but enough wherever only the limit is used: \cref{prop:han-3-4} and \cref{thm:han-5-5}.
+\end{remark}
+
+\section{The multivariate combinatorial CLT}
+
+\begin{proposition}[Mean and covariance; \han{Proposition 3.3}{60}]
+  \label{prop:han-3-3}
+  \uses{def:combinatorial-sum}
+  \fid{as printed}
+  For an array of vectors $\boldsymbol a_{ij}\in\R^p$ with double centring $\boldsymbol d_{ij}$, $\boldsymbol Y=\sum_i\boldsymbol a_{i\pi(i)}$ has mean $\boldsymbol\mu_A=N^{-1}\sum_{i,j}\boldsymbol a_{ij}$ and covariance $\boldsymbol\Sigma_A=(N-1)^{-1}\sum_{i,j}\boldsymbol d_{ij}\boldsymbol d_{ij}^\top$.
+\end{proposition}
+\begin{proof}
+  \uses{prop:han-3-1}
+  Apply \cref{prop:han-3-1} to every linear combination.
+\end{proof}
+
+\begin{proposition}[Multivariate combinatorial CLT; \han{Proposition 3.4}{60}]
+  \label{prop:han-3-4}
+  \uses{prop:han-3-3, def:han-2-2}
+  \fid{adapted}
+  Let $p$ be fixed and $\boldsymbol\Sigma_A$ positive definite. If
+  $\frac1N\sum_{i,j}\bigl\|\boldsymbol\Sigma_A^{-1/2}\boldsymbol d_{ij}\bigr\|_2^3\to0$ (condition (3.9)), then $\boldsymbol\Sigma_A^{-1/2}(\boldsymbol Y-\boldsymbol\mu_A)\Rightarrow N(0,\mathbf I_p)$.
+\end{proposition}
+\begin{proof}
+  \uses{cor:han-2-1, lem:trunc-clt}
+  By \cref{cor:han-2-1} it suffices to show $v^\top\boldsymbol\Sigma_A^{-1/2}(\boldsymbol Y-\boldsymbol\mu_A)\Rightarrow N(0,1)$ for unit vectors $v$. This is the combinatorial sum of the doubly centred array $w_{ij}=v^\top\boldsymbol\Sigma_A^{-1/2}\boldsymbol d_{ij}$, whose $\sigma$ equals $1$ and whose $L_N=\frac1N\sum_{i,j}|w_{ij}|^3$ is at most the quantity in (3.9). Apply \cref{lem:trunc-clt}.
+\end{proof}
+\begin{remark}
+  The book's proof uses its Theorem 3.1 (cited) at the same point; \cref{lem:trunc-clt} replaces it. \Cref{thm:han-5-1,thm:han-5-5} do not need this proposition.
+\end{remark}
